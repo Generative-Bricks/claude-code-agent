@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+outputs/*.pdf
+outputs/*.md
+*.log
+.DS_Store

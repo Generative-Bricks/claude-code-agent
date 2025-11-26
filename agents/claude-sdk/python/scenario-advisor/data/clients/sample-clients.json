@@ -1,0 +1,274 @@
+{
+  "clients": [
+    {
+      "id": "CLIENT001",
+      "name": "Robert Thompson",
+      "age": 62,
+      "risk_tolerance": "conservative",
+      "portfolio_value": 850000,
+      "annual_income": 120000,
+      "retirement_status": "approaching",
+      "years_to_retirement": 3,
+      "current_holdings": {
+        "stocks": 280000,
+        "bonds": 320000,
+        "cash": 150000,
+        "annuities": 100000
+      },
+      "existing_annuities": [
+        {
+          "product_name": "Secure Income Builder FIA",
+          "carrier": "Lincoln Financial",
+          "purchase_date": "2020-03-15",
+          "current_value": 100000,
+          "guaranteed_income_start": "2026-01-01",
+          "income_rider": true
+        }
+      ],
+      "life_events": [
+        {
+          "event_type": "retirement_planning",
+          "expected_date": "2028-06-01",
+          "notes": "Planning for early retirement"
+        }
+      ],
+      "goals": [
+        "Guaranteed income for retirement",
+        "Principal protection",
+        "Legacy planning for grandchildren"
+      ],
+      "concerns": [
+        "Market volatility near retirement",
+        "Healthcare costs",
+        "Outliving savings"
+      ]
+    },
+    {
+      "id": "CLIENT002",
+      "name": "Jennifer Martinez",
+      "age": 48,
+      "risk_tolerance": "moderate",
+      "portfolio_value": 1250000,
+      "annual_income": 185000,
+      "retirement_status": "accumulation",
+      "years_to_retirement": 17,
+      "current_holdings": {
+        "stocks": 650000,
+        "bonds": 350000,
+        "cash": 100000,
+        "annuities": 150000,
+        "real_estate": 500000
+      },
+      "existing_annuities": [
+        {
+          "product_name": "Growth Plus Index Annuity",
+          "carrier": "Allianz",
+          "purchase_date": "2018-09-20",
+          "current_value": 150000,
+          "guaranteed_income_start": null,
+          "income_rider": false
+        }
+      ],
+      "life_events": [
+        {
+          "event_type": "inheritance_received",
+          "expected_date": "2025-02-01",
+          "notes": "Expecting $300,000 inheritance from estate settlement",
+          "amount": 300000
+        },
+        {
+          "event_type": "child_college",
+          "expected_date": "2027-09-01",
+          "notes": "Youngest child starting college"
+        }
+      ],
+      "goals": [
+        "Tax-efficient growth",
+        "College funding flexibility",
+        "Diversification with downside protection"
+      ],
+      "concerns": [
+        "Tax implications of inheritance",
+        "Market corrections",
+        "Balancing growth with protection"
+      ]
+    },
+    {
+      "id": "CLIENT003",
+      "name": "David and Susan Chen",
+      "age": 71,
+      "risk_tolerance": "very_conservative",
+      "portfolio_value": 2100000,
+      "annual_income": 95000,
+      "retirement_status": "retired",
+      "years_to_retirement": -6,
+      "current_holdings": {
+        "stocks": 300000,
+        "bonds": 800000,
+        "cash": 400000,
+        "annuities": 600000
+      },
+      "existing_annuities": [
+        {
+          "product_name": "Guaranteed Lifetime Income Annuity",
+          "carrier": "MetLife",
+          "purchase_date": "2015-04-10",
+          "current_value": 400000,
+          "guaranteed_income_start": "2019-07-01",
+          "income_rider": true,
+          "current_annual_income": 28000
+        },
+        {
+          "product_name": "Fixed Index Annuity",
+          "carrier": "Nationwide",
+          "purchase_date": "2017-11-05",
+          "current_value": 200000,
+          "guaranteed_income_start": null,
+          "income_rider": false
+        }
+      ],
+      "life_events": [
+        {
+          "event_type": "downsizing_home",
+          "expected_date": "2025-08-01",
+          "notes": "Selling primary residence, expecting $450,000 net proceeds",
+          "amount": 450000
+        },
+        {
+          "event_type": "healthcare_needs",
+          "expected_date": "ongoing",
+          "notes": "Increased healthcare expenses anticipated"
+        }
+      ],
+      "goals": [
+        "Maximize guaranteed income",
+        "Long-term care planning",
+        "Estate planning for children",
+        "Principal preservation"
+      ],
+      "concerns": [
+        "Inflation eroding purchasing power",
+        "Long-term care costs",
+        "Leaving legacy for family",
+        "Sequence of returns risk"
+      ]
+    },
+    {
+      "id": "CLIENT004",
+      "name": "Amanda Foster",
+      "age": 55,
+      "risk_tolerance": "moderate_aggressive",
+      "portfolio_value": 975000,
+      "annual_income": 145000,
+      "retirement_status": "accumulation",
+      "years_to_retirement": 10,
+      "current_holdings": {
+        "stocks": 585000,
+        "bonds": 195000,
+        "cash": 95000,
+        "annuities": 100000,
+        "alternative_investments": 150000
+      },
+      "existing_annuities": [
+        {
+          "product_name": "Market Linked FIA",
+          "carrier": "AIG",
+          "purchase_date": "2021-06-15",
+          "current_value": 100000,
+          "guaranteed_income_start": null,
+          "income_rider": false
+        }
+      ],
+      "life_events": [
+        {
+          "event_type": "divorce_settlement",
+          "expected_date": "2025-04-01",
+          "notes": "Divorce finalized, receiving $250,000 settlement",
+          "amount": 250000
+        },
+        {
+          "event_type": "career_change",
+          "expected_date": "2025-09-01",
+          "notes": "Transitioning to consulting, variable income expected"
+        }
+      ],
+      "goals": [
+        "Aggressive growth with some protection",
+        "Flexible income options for career transition",
+        "Tax optimization",
+        "Catch-up retirement savings"
+      ],
+      "concerns": [
+        "Income stability during career transition",
+        "Optimizing divorce settlement funds",
+        "Making up lost time for retirement",
+        "Healthcare coverage during transition"
+      ]
+    },
+    {
+      "id": "CLIENT005",
+      "name": "Michael O'Brien",
+      "age": 67,
+      "risk_tolerance": "conservative",
+      "portfolio_value": 1450000,
+      "annual_income": 78000,
+      "retirement_status": "retired",
+      "years_to_retirement": -2,
+      "current_holdings": {
+        "stocks": 350000,
+        "bonds": 550000,
+        "cash": 250000,
+        "annuities": 300000
+      },
+      "existing_annuities": [
+        {
+          "product_name": "Income Shield FIA",
+          "carrier": "Pacific Life",
+          "purchase_date": "2019-01-20",
+          "current_value": 200000,
+          "guaranteed_income_start": "2024-01-01",
+          "income_rider": true,
+          "current_annual_income": 14000
+        },
+        {
+          "product_name": "Accumulation Plus FIA",
+          "carrier": "Athene",
+          "purchase_date": "2020-07-10",
+          "current_value": 100000,
+          "guaranteed_income_start": null,
+          "income_rider": false
+        }
+      ],
+      "life_events": [
+        {
+          "event_type": "pension_lump_sum",
+          "expected_date": "2025-03-01",
+          "notes": "Employer offering one-time pension buyout option",
+          "amount": 380000
+        },
+        {
+          "event_type": "spouse_retirement",
+          "expected_date": "2026-12-01",
+          "notes": "Spouse planning to retire, household income will decrease"
+        }
+      ],
+      "goals": [
+        "Evaluate pension buyout decision",
+        "Maximize guaranteed lifetime income",
+        "Inflation protection",
+        "Healthcare cost coverage"
+      ],
+      "concerns": [
+        "Pension buyout vs. monthly payments decision",
+        "Rising healthcare costs",
+        "Inflation impact on fixed income",
+        "Supporting spouse through retirement transition"
+      ]
+    }
+  ],
+  "metadata": {
+    "generated_date": "2025-01-25",
+    "data_version": "1.0",
+    "notes": "Sample client data for Financial Scenario Advisor testing. Covers diverse profiles including pre-retirement, retired, life events, and varying risk tolerances."
+  }
+}

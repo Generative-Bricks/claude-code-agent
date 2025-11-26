@@ -1,0 +1,3660 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Knowledge Graph Visualization</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        #mynetwork {
+            width: 100%;
+            height: 90vh;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #333;
+            margin: 0;
+        }
+        .header p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .controls {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .controls button {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #4ECDC4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .controls button:hover {
+            background-color: #45B7D1;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #333;
+        }
+        .info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f4f8;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Claude Code Agent Knowledge Graph</h1>
+        <p>Interactive visualization of entities and relationships from memory.jsonl</p>
+    </div>
+    
+    <div class="controls">
+        <button onclick="fitNetwork()">Fit to Screen</button>
+        <button onclick="resetZoom()">Reset Zoom</button>
+        <button onclick="togglePhysics()">Toggle Physics</button>
+        <button onclick="exportImage()">Export as PNG</button>
+        <input type="text" id="searchBox" placeholder="Search nodes..." onkeyup="searchNodes()" style="padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; width: 200px;">
+    </div>
+    
+    <div class="legend">
+        <strong>Entity Types:</strong>
+        <div class="legend-item"><div class="legend-color" style="background-color: #96CEB4;"></div><span>Agent</span></div><div class="legend-item"><div class="legend-color" style="background-color: #BB8FCE;"></div><span>Architectural Decision</span></div><div class="legend-item"><div class="legend-color" style="background-color: #F7DC6F;"></div><span>Documentation</span></div><div class="legend-item"><div class="legend-color" style="background-color: #45B7D1;"></div><span>Language</span></div><div class="legend-item"><div class="legend-color" style="background-color: #85C1E2;"></div><span>Learning</span></div><div class="legend-item"><div class="legend-color" style="background-color: #98D8C8;"></div><span>MCPServer</span></div><div class="legend-item"><div class="legend-color" style="background-color: #DDA0DD;"></div><span>Pattern</span></div><div class="legend-item"><div class="legend-color" style="background-color: #FF6B6B;"></div><span>Repository</span></div><div class="legend-item"><div class="legend-color" style="background-color: #4ECDC4;"></div><span>SDK</span></div><div class="legend-item"><div class="legend-color" style="background-color: #F8B88B;"></div><span>Skill</span></div><div class="legend-item"><div class="legend-color" style="background-color: #FFEAA7;"></div><span>Tool</span></div>
+    </div>
+    
+    <div id="mynetwork"></div>
+    
+    <div class="info">
+        <strong>Tips:</strong> Drag nodes to rearrange • Scroll to zoom • Click nodes to highlight connections • 
+        Use search box to find specific entities • Toggle physics to stabilize layout
+    </div>
+    
+    <script type="text/javascript">
+        // Create nodes and edges
+        const nodes = new vis.DataSet([
+  {
+    "id": 0,
+    "label": "claude-code-agent",
+    "title": "<b>claude-code-agent</b><br>Type: Repository<br><br>Observations:<br>Multi-agent testing repository for building AI agents across various SDKs and frameworks<br>Organizes agents by SDK/framework with language subfolders<br>Includes comprehensive documentation, templates, and memory system<br>Version 1.0.0 - Active Development<br>Uses Bun for TypeScript projects and uv for Python projects",
+    "color": {
+      "background": "#FF6B6B",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FF6B6B",
+        "border": "#000000"
+      }
+    },
+    "size": 26,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Repository"
+  },
+  {
+    "id": 1,
+    "label": "Claude SDK",
+    "title": "<b>Claude SDK</b><br>Type: SDK<br><br>Observations:<br>Official Anthropic SDK for building Claude-powered agents<br>Current version: 0.1.37<br>Supports TypeScript and Python<br>Includes tool calling, subagent support, and structured outputs<br>Context7 Library IDs: /anthropics/anthropic-sdk-typescript and /anthropics/anthropic-sdk-python",
+    "color": {
+      "background": "#4ECDC4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#4ECDC4",
+        "border": "#000000"
+      }
+    },
+    "size": 20,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "SDK"
+  },
+  {
+    "id": 2,
+    "label": "Strands Agents",
+    "title": "<b>Strands Agents</b><br>Type: SDK<br><br>Observations:<br>Model-driven SDK for building AI agents<br>Lightweight and model-agnostic approach<br>Supports MCP server integration<br>Available in TypeScript and Python<br>Context7 Library ID: /strands-agents/docs and /strands-agents/sdk-python",
+    "color": {
+      "background": "#4ECDC4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#4ECDC4",
+        "border": "#000000"
+      }
+    },
+    "size": 18,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "SDK"
+  },
+  {
+    "id": 3,
+    "label": "TypeScript",
+    "title": "<b>TypeScript</b><br>Type: Language<br><br>Observations:<br>Primary language for agent development<br>Uses Bun as runtime and package manager<br>Strict TypeScript settings required<br>Follows camelCase naming convention<br>Target: Modern ESNext",
+    "color": {
+      "background": "#45B7D1",
+      "border": "#333333",
+      "highlight": {
+        "background": "#45B7D1",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Language"
+  },
+  {
+    "id": 4,
+    "label": "Python",
+    "title": "<b>Python</b><br>Type: Language<br><br>Observations:<br>Secondary language for agent development<br>Uses uv for virtual environments (NOT python -m venv)<br>Follows snake_case naming convention (PEP8)<br>Package management via uv pip<br>Always activate venv before any pip operations",
+    "color": {
+      "background": "#45B7D1",
+      "border": "#333333",
+      "highlight": {
+        "background": "#45B7D1",
+        "border": "#000000"
+      }
+    },
+    "size": 22,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Language"
+  },
+  {
+    "id": 5,
+    "label": "financial-advisor-agent",
+    "title": "<b>financial-advisor-agent</b><br>Type: Agent<br><br>Observations:<br>Production-ready financial advisor specializing in annuity allocation analysis<br>Location: agents/claude-sdk/typescript/financial-advisor/<br>Framework: Claude Agent SDK v0.1.37<br>Language: TypeScript<br>Status: Production-ready v1.0.0<br><i>(+5 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 34,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 6,
+    "label": "analyze_annuity_suitability",
+    "title": "<b>analyze_annuity_suitability</b><br>Type: Tool<br><br>Observations:<br>Part of financial-advisor-agent toolkit<br>Evaluates client suitability for annuity products<br>Uses scoring algorithm with multiple factors<br>Zod schema validation for inputs<br>Returns structured suitability score and reasoning",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 7,
+    "label": "calculate_annuity_payout",
+    "title": "<b>calculate_annuity_payout</b><br>Type: Tool<br><br>Observations:<br>Part of financial-advisor-agent toolkit<br>Calculates projected annuity income streams<br>Considers various payout options and rates<br>Zod schema validation for inputs<br>Returns detailed income projections",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 8,
+    "label": "compare_annuity_types",
+    "title": "<b>compare_annuity_types</b><br>Type: Tool<br><br>Observations:<br>Part of financial-advisor-agent toolkit<br>Compares different annuity product types<br>Side-by-side feature and benefit analysis<br>Zod schema validation for inputs<br>Returns structured comparison matrix",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 9,
+    "label": "assess_portfolio_allocation",
+    "title": "<b>assess_portfolio_allocation</b><br>Type: Tool<br><br>Observations:<br>Part of financial-advisor-agent toolkit<br>Optimizes portfolio allocation with annuities<br>Risk-adjusted allocation recommendations<br>Zod schema validation for inputs<br>Returns optimized allocation strategy",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 10,
+    "label": "evaluate_tax_implications",
+    "title": "<b>evaluate_tax_implications</b><br>Type: Tool<br><br>Observations:<br>Part of financial-advisor-agent toolkit<br>Analyzes tax impact of annuity decisions<br>Considers various tax scenarios<br>Zod schema validation for inputs<br>Returns tax analysis and projections",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 11,
+    "label": "fetch_annuity_rates",
+    "title": "<b>fetch_annuity_rates</b><br>Type: Tool<br><br>Observations:<br>Part of financial-advisor-agent toolkit<br>Retrieves current market annuity rates<br>Currently uses mock data with clear API integration points<br>Zod schema validation for inputs<br>Returns current rate information",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 12,
+    "label": "Zod Validation Pattern",
+    "title": "<b>Zod Validation Pattern</b><br>Type: Pattern<br><br>Observations:<br>Use Zod schemas for all tool input validation<br>Provides both compile-time type safety and runtime validation<br>Descriptive error messages for invalid inputs<br>Successfully used in financial-advisor-agent<br>Recommended for all future agents",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 13,
+    "label": "Subagent Specialization Pattern",
+    "title": "<b>Subagent Specialization Pattern</b><br>Type: Pattern<br><br>Observations:<br>Use Sonnet for complex reasoning and deep analysis tasks<br>Use Haiku for optimization and quick calculations<br>Pass clear context and success criteria to subagents<br>Demonstrated in financial-advisor-agent<br>Reduces costs while maintaining quality",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 14,
+    "label": "Workflow Stage Pattern",
+    "title": "<b>Workflow Stage Pattern</b><br>Type: Pattern<br><br>Observations:<br>Break agent interactions into clear stages<br>Example: Discovery \u2192 Assessment \u2192 Analysis \u2192 Recommendation \u2192 Documentation<br>Makes agent behavior predictable and debuggable<br>Successfully implemented in financial-advisor-agent<br>Recommended for complex multi-step agents",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 15,
+    "label": "Mock Data Integration Pattern",
+    "title": "<b>Mock Data Integration Pattern</b><br>Type: Pattern<br><br>Observations:<br>Use mock data during development with clear API integration points<br>Structure mock data identically to expected API responses<br>Document where to replace mock data with real API calls<br>Makes testing faster and development more flexible<br>Successfully used in financial-advisor-agent",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 16,
+    "label": "bedrock-agentcore-mcp-server",
+    "title": "<b>bedrock-agentcore-mcp-server</b><br>Type: MCPServer<br><br>Observations:<br>Provides Bedrock AgentCore documentation<br>Configured in .mcp.json<br>Access via mcp__bedrock-agentcore-mcp-server__ tools<br>Useful for deploying agents to AWS Bedrock",
+    "color": {
+      "background": "#98D8C8",
+      "border": "#333333",
+      "highlight": {
+        "background": "#98D8C8",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "MCPServer"
+  },
+  {
+    "id": 17,
+    "label": "aws-documentation-mcp-server",
+    "title": "<b>aws-documentation-mcp-server</b><br>Type: MCPServer<br><br>Observations:<br>Provides AWS documentation search and retrieval<br>Configured in .mcp.json<br>Access via mcp__awslabs_aws-documentation-mcp-server__ tools<br>Supports search, read, and recommendation functions",
+    "color": {
+      "background": "#98D8C8",
+      "border": "#333333",
+      "highlight": {
+        "background": "#98D8C8",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "MCPServer"
+  },
+  {
+    "id": 18,
+    "label": "context7",
+    "title": "<b>context7</b><br>Type: MCPServer<br><br>Observations:<br>Provides library documentation retrieval<br>Configured in .mcp.json<br>Access via mcp__context7__ tools<br>Library IDs documented in docs/references/context7-library-ids-reference.md<br>Essential for fetching up-to-date SDK documentation",
+    "color": {
+      "background": "#98D8C8",
+      "border": "#333333",
+      "highlight": {
+        "background": "#98D8C8",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "MCPServer"
+  },
+  {
+    "id": 19,
+    "label": "strands-agents-mcp",
+    "title": "<b>strands-agents-mcp</b><br>Type: MCPServer<br><br>Observations:<br>Provides Strands Agents framework documentation<br>Configured in .mcp.json<br>Access via mcp__strands-agents__ tools<br>Useful when building Strands-based agents",
+    "color": {
+      "background": "#98D8C8",
+      "border": "#333333",
+      "highlight": {
+        "background": "#98D8C8",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "MCPServer"
+  },
+  {
+    "id": 20,
+    "label": "memory-server",
+    "title": "<b>memory-server</b><br>Type: MCPServer<br><br>Observations:<br>Provides knowledge graph functionality<br>Configured in .mcp.json with custom path<br>Access via mcp__memory__ tools<br>Stores entities, relations, and observations<br>This memory.jsonl file is managed by this server",
+    "color": {
+      "background": "#98D8C8",
+      "border": "#333333",
+      "highlight": {
+        "background": "#98D8C8",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "MCPServer"
+  },
+  {
+    "id": 21,
+    "label": "context7-library-ids-reference",
+    "title": "<b>context7-library-ids-reference</b><br>Type: Documentation<br><br>Observations:<br>Location: docs/references/context7-library-ids-reference.md<br>Contains verified Context7 library IDs for common SDKs<br>Includes Google AI, Anthropic Claude, Strands, OpenAI, LangChain, Vercel AI SDK, React, Supabase, and MCP<br>All library IDs verified using Context7 resolve-library-id tool<br>Essential reference for fetching documentation",
+    "color": {
+      "background": "#F7DC6F",
+      "border": "#333333",
+      "highlight": {
+        "background": "#F7DC6F",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Documentation"
+  },
+  {
+    "id": 22,
+    "label": "SDK-based Organization",
+    "title": "<b>SDK-based Organization</b><br>Type: Architectural Decision<br><br>Observations:<br>Repository organized by SDK/framework first, then language<br>Rationale: Allows comparing implementations across languages within same framework<br>Structure: agents/sdk-name/language/agent-name/<br>Example: agents/claude-sdk/typescript/financial-advisor/<br>Facilitates pattern identification across similar implementations",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  },
+  {
+    "id": 23,
+    "label": "Template System",
+    "title": "<b>Template System</b><br>Type: Architectural Decision<br><br>Observations:<br>Templates provide quick-start boilerplate for new agents<br>Organized by SDK and language<br>Location: templates/sdk-language/<br>Includes complete project structure, config files, and documentation<br>Reduces setup time and ensures consistency",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  },
+  {
+    "id": 24,
+    "label": "Memory System Integration",
+    "title": "<b>Memory System Integration</b><br>Type: Architectural Decision<br><br>Observations:<br>Uses MCP Memory Server for knowledge graph<br>Tracks architectural decisions, patterns, and learnings<br>Format: JSONL with entities and relations<br>Location: docs/memory/memory.jsonl<br>Enables cross-agent learning and pattern discovery",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  },
+  {
+    "id": 25,
+    "label": "Documentation-First Approach",
+    "title": "<b>Documentation-First Approach</b><br>Type: Architectural Decision<br><br>Observations:<br>Every agent project requires comprehensive CLAUDE.md<br>Root-level documentation explains repository structure<br>Workflow documentation guides development process<br>Comparison matrices enable learning from different approaches<br>Documentation updated continuously, not at the end",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  },
+  {
+    "id": 26,
+    "label": "Tool Design Best Practices",
+    "title": "<b>Tool Design Best Practices</b><br>Type: Learning<br><br>Observations:<br>Keep tools focused - one clear purpose per tool<br>Use descriptive names (analyze_annuity_suitability vs checkSuitability)<br>Validate all inputs with type-safe schemas (Zod for TypeScript)<br>Return structured data, not just strings<br>Include comprehensive error handling in every tool<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 24,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 27,
+    "label": "Agent Complexity Management",
+    "title": "<b>Agent Complexity Management</b><br>Type: Learning<br><br>Observations:<br>Start simple, add complexity only when needed<br>Use subagents for clear task delegation<br>Define explicit workflows for multi-step processes<br>Mock data accelerates development and testing<br>Clear separation of concerns (tools, types, data, agents)",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 30,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 28,
+    "label": "google-drive-agent",
+    "title": "<b>google-drive-agent</b><br>Type: Agent<br><br>Observations:<br>Production-ready Google Drive document assistant with Q&A, search, and summarization<br>Location: agents/strands-agents/python/google-drive-agent/<br>Framework: Strands Agents v1.0.0+<br>Language: Python<br>Status: Production-ready v1.0.0<br><i>(+10 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 34,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 29,
+    "label": "search_files",
+    "title": "<b>search_files</b><br>Type: Tool<br><br>Observations:<br>Part of google-drive-agent toolkit<br>Search Google Drive by keyword (searches names and content)<br>Supports both My Drive and Shared Drives (supportsAllDrives=True)<br>Optional folder scoping and MIME type filtering<br>name_only parameter for searching only file names (not content)<br><i>(+3 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 30,
+    "label": "list_folder",
+    "title": "<b>list_folder</b><br>Type: Tool<br><br>Observations:<br>Part of google-drive-agent toolkit<br>Browse contents of a specific Google Drive folder<br>Supports both My Drive folders and Shared Drive folders<br>Configurable to include/exclude files and subfolders<br>Pydantic schema validation for inputs<br><i>(+3 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 31,
+    "label": "get_file_content",
+    "title": "<b>get_file_content</b><br>Type: Tool<br><br>Observations:<br>Part of google-drive-agent toolkit<br>Extract full text content from any supported file type<br>Supports: Google Docs/Sheets/Slides, PDF, Word, Excel, Text, CSV<br>Automatic cache checking (by file ID + modification time)<br>Pydantic schema validation for inputs<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 32,
+    "label": "No RAG For Small Collections",
+    "title": "<b>No RAG For Small Collections</b><br>Type: Architectural Decision<br><br>Observations:<br>Key insight: RAG unnecessary for 20-100 files, 1-file-at-a-time usage<br>Modern LLMs have 200K-2M token context windows<br>One medium file (5-20 pages) = 3K-13K tokens<br>Entire file easily fits in context without retrieval<br>Simplified workflow: Search \u2192 Download \u2192 Pass to LLM (3 steps vs 7+ with RAG)<br><i>(+5 more)</i>",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  },
+  {
+    "id": 33,
+    "label": "Direct Context Passing Pattern",
+    "title": "<b>Direct Context Passing Pattern</b><br>Type: Pattern<br><br>Observations:<br>Pass full file content directly to LLM context instead of RAG retrieval<br>Applicable when: small-to-medium documents, processing 1-few files at a time<br>Benefits: Simpler code, no vector database, no embeddings, faster development<br>Limitations: Not suitable for large document collections (1000s of files) or very long documents<br>Successfully implemented in google-drive-agent<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 34,
+    "label": "Service-Based Architecture Pattern",
+    "title": "<b>Service-Based Architecture Pattern</b><br>Type: Pattern<br><br>Observations:<br>Separate concerns into focused service classes<br>Each service has single, clear responsibility<br>Services are independently testable and reusable<br>Example services: AuthService (authentication), DriveService (API wrapper), ContentExtractor (file parsing), CacheService (content caching)<br>Factory function pattern for creating tools with service dependencies<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 35,
+    "label": "Smart Caching Pattern",
+    "title": "<b>Smart Caching Pattern</b><br>Type: Pattern<br><br>Observations:<br>Cache extracted content keyed by file ID + modification time<br>Automatic cache invalidation when file modified<br>Dramatically speeds up repeated queries (instant vs 1-5 seconds)<br>Metadata tracking: file name, size, cached timestamp<br>Cache statistics and management commands<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 36,
+    "label": "OAuth Token Caching Pattern",
+    "title": "<b>OAuth Token Caching Pattern</b><br>Type: Pattern<br><br>Observations:<br>Save OAuth tokens locally for reuse (avoid repeated browser flows)<br>Automatic token refresh when expired<br>First run: browser OAuth flow, subsequent runs: instant<br>Token stored securely (gitignored credentials/token.pickle)<br>Clear error messages with setup instructions if credentials missing<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 37,
+    "label": "Question Complexity Assumptions",
+    "title": "<b>Question Complexity Assumptions</b><br>Type: Learning<br><br>Observations:<br>User questioned initial RAG plan: 'Why not just use Gemini API?'<br>Saved 2-3 weeks by validating assumptions before coding<br>Always ask: What's the simplest solution that solves the actual problem?<br>Modern LLM context windows eliminate need for RAG in many cases<br>YAGNI principle: You Aren't Gonna Need It<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 38,
+    "label": "Python Virtual Environment Best Practices",
+    "title": "<b>Python Virtual Environment Best Practices</b><br>Type: Learning<br><br>Observations:<br>Always use 'uv venv' for Python projects (NOT python -m venv)<br>Repository standard: uv for all Python package management<br>Activation (Windows Git Bash): source .venv/Scripts/activate<br>Install packages: uv pip install -r requirements.txt<br>Never install to root Python - always activate venv first<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 39,
+    "label": "list_shared_drives",
+    "title": "<b>list_shared_drives</b><br>Type: Tool<br><br>Observations:<br>Part of google-drive-agent toolkit<br>List all Shared Drives (Team Drives) user has access to<br>No input parameters required<br>Returns list of Shared Drives with id and name<br>Uses Google Drive API drives().list() endpoint<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 40,
+    "label": "Google Drive Shared Drive Support",
+    "title": "<b>Google Drive Shared Drive Support</b><br>Type: Pattern<br><br>Observations:<br>Add supportsAllDrives=True to all Drive API calls that need Shared Drive access<br>Add includeItemsFromAllDrives=True to include Shared Drive items in results<br>Required for: files().list(), files().get(), files().get_media()<br>Uses separate drives().list() endpoint to list Shared Drives<br>Shared Drive folders work identically to My Drive folders once you have the ID<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 41,
+    "label": "Incremental Feature Enhancement",
+    "title": "<b>Incremental Feature Enhancement</b><br>Type: Learning<br><br>Observations:<br>Started with 3 tools (search, list, get content) working only with My Drive<br>User requested: 'can we access my shared drive?'<br>Added Shared Drive support incrementally: 1) API parameters 2) new list tool 3) testing<br>Testing proved implementation worked for all 4 tools<br>Total implementation time: ~15 minutes<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 42,
+    "label": "fia-analyzer-agent",
+    "title": "<b>fia-analyzer-agent</b><br>Type: Agent<br><br>Observations:<br>Production-ready Fixed Indexed Annuity product analyzer for financial advisors<br>Location: agents/claude-sdk/python/fia-analyzer/<br>Framework: Claude SDK (Python)<br>Language: Python<br>Status: Production-ready v1.0.0 (75% complete)<br><i>(+11 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 32,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 43,
+    "label": "search_fia_products",
+    "title": "<b>search_fia_products</b><br>Type: Tool<br><br>Observations:<br>Part of fia-analyzer-agent toolkit<br>Search for FIA products by name and optional carrier filter<br>Case-insensitive partial matching<br>Returns up to 5 matching products with URLs and summaries<br>Pydantic schema validation for inputs<br><i>(+4 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 44,
+    "label": "extract_fia_rates",
+    "title": "<b>extract_fia_rates</b><br>Type: Tool<br><br>Observations:<br>Part of fia-analyzer-agent toolkit<br>Parse FIA product information from markdown content<br>Extracts rates, surrender charges, riders, index options, company info<br>Returns complete FIAProduct model with nested structures<br>Strict validation - raises ValueError for missing required fields<br><i>(+5 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 45,
+    "label": "analyze_product_fit",
+    "title": "<b>analyze_product_fit</b><br>Type: Tool<br><br>Observations:<br>Part of fia-analyzer-agent toolkit<br>Calculate suitability scores for FIA products and clients<br>10-question framework: age, liquidity, income needs, asset allocation, time horizon, risk tolerance, tax, understanding, fees, alternatives<br>Score formula: (YES / (YES + NO)) \u00d7 100<br>N/A handling: Excludes from calculation (graceful incomplete data)<br><i>(+6 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 46,
+    "label": "fia-analysis-skill",
+    "title": "<b>fia-analysis-skill</b><br>Type: Skill<br><br>Observations:<br>Custom Claude Agent Skill for FIA product analysis<br>Location: agents/claude-sdk/python/fia-analyzer/fia-analysis-skill/<br>40-question comprehensive suitability framework<br>3-step workflow: Data Collection \u2192 Document Creation \u2192 Output<br>Markdown + PDF templates for reports<br><i>(+6 more)</i>",
+    "color": {
+      "background": "#F8B88B",
+      "border": "#333333",
+      "highlight": {
+        "background": "#F8B88B",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Skill"
+  },
+  {
+    "id": 47,
+    "label": "External Service Integration Pattern",
+    "title": "<b>External Service Integration Pattern</b><br>Type: Pattern<br><br>Observations:<br>Leverage external services instead of building custom solutions<br>Examples: Anthropic PDF skill (vs reportlab), Fetch MCP server (vs custom scraping)<br>Benefits: 70% code reduction, production-tested components, faster development<br>Trade-offs: Dependency on external services, potential vendor lock-in<br>Successfully demonstrated in fia-analyzer-agent<br><i>(+3 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 48,
+    "label": "Simplified Architecture Pattern",
+    "title": "<b>Simplified Architecture Pattern</b><br>Type: Pattern<br><br>Observations:<br>Design for simplicity first, add complexity only when proven necessary<br>Use external services (MCP, Skills) to reduce custom code<br>Clear integration points for future enhancements<br>Mock data for development, real APIs for production<br>Successfully demonstrated in fia-analyzer-agent: 800 lines vs 2,000+ original plan<br><i>(+3 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 49,
+    "label": "N/A Handling Pattern",
+    "title": "<b>N/A Handling Pattern</b><br>Type: Pattern<br><br>Observations:<br>Gracefully handle incomplete or missing data with N/A responses<br>Exclude N/A responses from score calculations<br>Essential for real-world scenarios with incomplete client data<br>Score formula: Only count YES and NO, skip N/A entirely<br>Successfully implemented in fia-analyzer-agent analyze_product_fit tool<br><i>(+3 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 50,
+    "label": "Pydantic Validation Pattern",
+    "title": "<b>Pydantic Validation Pattern</b><br>Type: Pattern<br><br>Observations:<br>Use Pydantic v2 models for all data structures<br>Provides compile-time type hints AND runtime validation<br>Comprehensive validation: ranges, formats, required fields, nested structures<br>Clear error messages for invalid data<br>Successfully used across all fia-analyzer-agent models<br><i>(+4 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 51,
+    "label": "Skills Integration for Specialized Frameworks",
+    "title": "<b>Skills Integration for Specialized Frameworks</b><br>Type: Architectural Decision<br><br>Observations:<br>Use Claude Agent Skills for specialized domain knowledge and frameworks<br>Example: FIA Analysis Skill provides 40-question suitability methodology<br>Benefits: Domain expertise encapsulated, reusable across agents, updatable independently<br>Custom skills require manual upload (not yet in public Python SDK)<br>Agent should work without custom skill (graceful degradation)<br><i>(+3 more)</i>",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  },
+  {
+    "id": 52,
+    "label": "External Services Reduce Complexity",
+    "title": "<b>External Services Reduce Complexity</b><br>Type: Learning<br><br>Observations:<br>Original plan: 6 custom tools + web scraping + PDF generation = ~2,000+ lines<br>Revised plan: 3 custom tools + Anthropic PDF skill + Fetch MCP = ~800 lines<br>70% code reduction by leveraging external services<br>Development time: 2 weeks actual vs 4 weeks original estimate<br>Maintenance burden: Much lower with production-tested external services<br><i>(+4 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 53,
+    "label": "Complex Nested Models Need Careful Testing",
+    "title": "<b>Complex Nested Models Need Careful Testing</b><br>Type: Learning<br><br>Observations:<br>FIAProduct model has 5 nested Pydantic models: SurrenderCharge, IndexOption, CurrentRate, Rider, CompanyInfo<br>Integration tests initially failed due to fixture mismatches with nested structures<br>Simple test fixtures (flat dictionaries) don't work with complex nested models<br>Solution: Use conftest.py fixtures that match actual model structure<br>41/67 unit tests passing - extract tests need fixture refinement<br><i>(+4 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 54,
+    "label": "OpenAI Agents SDK",
+    "title": "<b>OpenAI Agents SDK</b><br>Type: SDK<br><br>Observations:<br>Official OpenAI SDK for building multi-agent systems<br>Current version: 0.2.0+<br>Supports Python (TypeScript coming)<br>Multi-agent patterns: Agents as Tools, Handoffs, Swarm<br>Built-in session memory with SQLiteSession<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#4ECDC4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#4ECDC4",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "SDK"
+  },
+  {
+    "id": 55,
+    "label": "portfolio-collaboration-system",
+    "title": "<b>portfolio-collaboration-system</b><br>Type: Agent<br><br>Observations:<br>Production-ready multi-agent portfolio analysis system<br>Location: agents/openai-agents/python/portfolio-collaboration/<br>Framework: OpenAI Agents SDK v0.2.0+<br>Language: Python<br>Status: Production-ready v1.0.0<br><i>(+10 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 40,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 56,
+    "label": "portfolio-manager-agent",
+    "title": "<b>portfolio-manager-agent</b><br>Type: Agent<br><br>Observations:<br>Orchestrator agent for portfolio-collaboration-system<br>Coordinates Risk, Compliance, Performance agents in parallel<br>Generates weighted suitability scores (0-100)<br>Creates actionable recommendations from specialist outputs<br>Generates markdown reports<br><i>(+4 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 57,
+    "label": "risk-analyst-agent",
+    "title": "<b>risk-analyst-agent</b><br>Type: Agent<br><br>Observations:<br>Specialist agent in portfolio-collaboration-system<br>Calculates portfolio risk metrics<br>Metrics: Volatility, VaR (95%), Beta, Concentration Score<br>Risk ratings: Low (<12%), Medium (12-20%), High (>20%)<br>581 lines of code<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 58,
+    "label": "compliance-officer-agent",
+    "title": "<b>compliance-officer-agent</b><br>Type: Agent<br><br>Observations:<br>Specialist agent in portfolio-collaboration-system<br>Validates portfolio regulatory compliance<br>Checks: Suitability, concentration limits, required disclosures<br>Compliance weighted highest in suitability score (35%)<br>428 lines of code<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 59,
+    "label": "performance-analyst-agent",
+    "title": "<b>performance-analyst-agent</b><br>Type: Agent<br><br>Observations:<br>Specialist agent in portfolio-collaboration-system<br>Analyzes portfolio performance metrics<br>Metrics: Total return, Sharpe ratio, Alpha, Sector attribution<br>Identifies top and bottom performers<br>387 lines of code<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 60,
+    "label": "equity-specialist-agent",
+    "title": "<b>equity-specialist-agent</b><br>Type: Agent<br><br>Observations:<br>Specialist agent in portfolio-collaboration-system<br>Deep-dive equity analysis using Handoff pattern<br>Analysis: Sector allocation, valuation metrics, growth vs value<br>588 lines of code<br>Receives handoffs from Portfolio Manager for detailed analysis<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#96CEB4",
+      "border": "#333333",
+      "highlight": {
+        "background": "#96CEB4",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Agent"
+  },
+  {
+    "id": 61,
+    "label": "run_comprehensive_analysis",
+    "title": "<b>run_comprehensive_analysis</b><br>Type: Tool<br><br>Observations:<br>Portfolio Manager orchestration tool<br>Runs Risk, Compliance, Performance agents in parallel<br>Calculates weighted suitability score from all specialist outputs<br>Generates recommendations based on specialist findings<br>Returns PortfolioRecommendations with complete analysis<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 62,
+    "label": "suitability_scoring",
+    "title": "<b>suitability_scoring</b><br>Type: Tool<br><br>Observations:<br>Calculates 0-100 suitability score from specialist outputs<br>Weighted formula: Compliance 35%, Risk 25%, Performance 25%, Time Horizon 15%<br>Ratings: Highly Suitable (80-100), Suitable (60-79), Marginal Fit (40-59), Not Suitable (0-39)<br>494 lines of code<br>Compliance weighted highest for regulatory priority<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 63,
+    "label": "parallel_execution",
+    "title": "<b>parallel_execution</b><br>Type: Tool<br><br>Observations:<br>Coordinates Risk, Compliance, Performance agents concurrently<br>Uses asyncio.gather() for parallel execution<br>Two modes: Synchronous (direct function calls) and Async (Agent SDK Runner)<br>390 lines of code<br>65% performance improvement (5s vs 15s)<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 64,
+    "label": "market_data",
+    "title": "<b>market_data</b><br>Type: Tool<br><br>Observations:<br>Yahoo Finance integration for real-time market data<br>Functions: fetch_current_price, fetch_historical_data, fetch_stock_info, fetch_dividend_data<br>Fallback to direct yfinance if MCP server unavailable<br>635 lines of code<br>Pydantic models: StockPrice, HistoricalData, CompanyInfo, DividendData<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 65,
+    "label": "report_generator",
+    "title": "<b>report_generator</b><br>Type: Tool<br><br>Observations:<br>Generates markdown-formatted portfolio analysis reports<br>Includes: Executive summary, risk analysis, compliance, performance, suitability, recommendations, action items<br>481 lines of code<br>Client-ready documentation<br>Part of portfolio-collaboration-system",
+    "color": {
+      "background": "#FFEAA7",
+      "border": "#333333",
+      "highlight": {
+        "background": "#FFEAA7",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Tool"
+  },
+  {
+    "id": 66,
+    "label": "Hybrid Multi-Agent Pattern",
+    "title": "<b>Hybrid Multi-Agent Pattern</b><br>Type: Pattern<br><br>Observations:<br>Combines Agents as Tools (parallel) + Handoffs (depth)<br>Parallel execution for independent specialists (Risk, Compliance, Performance)<br>Handoff pattern for deep conversational analysis (Equity Specialist)<br>Best of both: Breadth from parallel execution, depth from handoffs<br>Successfully demonstrated in portfolio-collaboration-system<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 67,
+    "label": "Parallel Agent Execution Pattern",
+    "title": "<b>Parallel Agent Execution Pattern</b><br>Type: Pattern<br><br>Observations:<br>Execute independent agents concurrently using asyncio.gather()<br>Requires: Agents as Tools pattern + async Runner<br>Benefits: Significant performance improvement (65% in portfolio-collaboration)<br>Constraints: Agents must be independent (no shared state/dependencies)<br>Successfully demonstrated in portfolio-collaboration-system<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 68,
+    "label": "Weighted Scoring Pattern",
+    "title": "<b>Weighted Scoring Pattern</b><br>Type: Pattern<br><br>Observations:<br>Calculate composite scores from multiple specialist inputs<br>Use domain-specific weights based on priority<br>Example: Compliance 35%, Risk 25%, Performance 25%, Time Horizon 15%<br>Provides single actionable score from complex multi-dimensional analysis<br>Successfully demonstrated in portfolio-collaboration suitability scoring<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 16,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 69,
+    "label": "Graceful Degradation Pattern",
+    "title": "<b>Graceful Degradation Pattern</b><br>Type: Pattern<br><br>Observations:<br>System continues with partial data when components fail<br>Examples: Missing cost basis (skip return calculations), Market data unavailable (use cached/mock)<br>Agent timeout (return partial results with warnings)<br>Successfully demonstrated in portfolio-collaboration-system<br>Production-grade resilience without complexity<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 70,
+    "label": "Recommendation Generation Pattern",
+    "title": "<b>Recommendation Generation Pattern</b><br>Type: Pattern<br><br>Observations:<br>Generate actionable recommendations using rule-based logic from specialist outputs<br>Transparent, explainable, auditable recommendations<br>No LLM hallucinations in critical advice<br>Rule categories: Risk-based, Compliance-based, Performance-based, Client-based<br>Successfully demonstrated in portfolio-collaboration Portfolio Manager<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#DDA0DD",
+      "border": "#333333",
+      "highlight": {
+        "background": "#DDA0DD",
+        "border": "#000000"
+      }
+    },
+    "size": 14,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Pattern"
+  },
+  {
+    "id": 71,
+    "label": "Parallel vs Sequential Agent Execution",
+    "title": "<b>Parallel vs Sequential Agent Execution</b><br>Type: Learning<br><br>Observations:<br>Sequential execution: ~15 seconds for 3 specialists<br>Parallel execution: ~5 seconds for 3 specialists (asyncio.gather)<br>65% performance improvement with parallel execution<br>Only possible when agents are independent (no dependencies)<br>Demonstrated in portfolio-collaboration-system<br><i>(+2 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 72,
+    "label": "Hybrid Patterns Maximize Capabilities",
+    "title": "<b>Hybrid Patterns Maximize Capabilities</b><br>Type: Learning<br><br>Observations:<br>Pure parallel: Fast but limited conversational depth<br>Pure handoff: Deep but slow for independent tasks<br>Hybrid (parallel + handoff): Best of both worlds<br>Successfully demonstrated in portfolio-collaboration: 3 parallel specialists + 1 handoff specialist<br>Design principle: Use parallel for breadth, handoffs for depth<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 73,
+    "label": "Circular Import Resolution",
+    "title": "<b>Circular Import Resolution</b><br>Type: Learning<br><br>Observations:<br>Portfolio Manager \u2192 Equity Specialist handoff caused circular imports<br>Solution: Lazy loading with _setup_handoffs() function called at runtime<br>Pattern: Import inside function, not at module level<br>Successfully resolved in portfolio-collaboration-system<br>Common issue in multi-agent systems with bidirectional relationships<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 74,
+    "label": "FunctionTool Decorator Limitations",
+    "title": "<b>FunctionTool Decorator Limitations</b><br>Type: Learning<br><br>Observations:<br>@function_tool decorated functions cannot be called directly in Python<br>Error: 'FunctionTool' object is not callable<br>Solution: Create non-decorated wrapper functions for direct calls<br>Example: perform_risk_analysis() wraps analyze_portfolio_risk()<br>Demonstrated in portfolio-collaboration parallel_execution<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#85C1E2",
+      "border": "#333333",
+      "highlight": {
+        "background": "#85C1E2",
+        "border": "#000000"
+      }
+    },
+    "size": 10,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Learning"
+  },
+  {
+    "id": 75,
+    "label": "Compliance-First Weighting",
+    "title": "<b>Compliance-First Weighting</b><br>Type: Architectural Decision<br><br>Observations:<br>Compliance weighted highest (35%) in suitability scoring<br>Rationale: Regulatory requirements are paramount in financial services<br>Risk and Performance equally weighted (25% each) - both critical for client fit<br>Time Horizon weighted lowest (15%) - important but secondary<br>Successfully implemented in portfolio-collaboration suitability scoring<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  },
+  {
+    "id": 76,
+    "label": "Mock Data Development with Real Data Ready",
+    "title": "<b>Mock Data Development with Real Data Ready</b><br>Type: Architectural Decision<br><br>Observations:<br>Use mock data during development for speed and independence<br>Real data integration (Yahoo Finance) production-ready but optional<br>Clear integration points marked with comments<br>Benefits: Faster testing, no API dependencies, deterministic results<br>Successfully implemented in portfolio-collaboration-system<br><i>(+1 more)</i>",
+    "color": {
+      "background": "#BB8FCE",
+      "border": "#333333",
+      "highlight": {
+        "background": "#BB8FCE",
+        "border": "#000000"
+      }
+    },
+    "size": 12,
+    "font": {
+      "size": 12,
+      "face": "Arial"
+    },
+    "group": "Architectural Decision"
+  }
+]);
+        const edges = new vis.DataSet([
+  {
+    "from": 0,
+    "to": 1,
+    "label": "tests",
+    "color": {
+      "color": "#FF6B6B",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 Claude SDK<br>Relation: tests",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 0,
+    "to": 2,
+    "label": "tests",
+    "color": {
+      "color": "#FF6B6B",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 Strands Agents<br>Relation: tests",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 0,
+    "to": 18,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 context7<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 0,
+    "to": 20,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 memory-server<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 0,
+    "to": 17,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 aws-documentation-mcp-server<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 0,
+    "to": 16,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 bedrock-agentcore-mcp-server<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 0,
+    "to": 19,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 strands-agents-mcp<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 0,
+    "to": 54,
+    "label": "tests",
+    "color": {
+      "color": "#FF6B6B",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "claude-code-agent \u2192 OpenAI Agents SDK<br>Relation: tests",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 1,
+    "to": 3,
+    "label": "supports",
+    "color": {
+      "color": "#45B7D1",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Claude SDK \u2192 TypeScript<br>Relation: supports",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "label": "supports",
+    "color": {
+      "color": "#45B7D1",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Claude SDK \u2192 Python<br>Relation: supports",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 2,
+    "to": 3,
+    "label": "supports",
+    "color": {
+      "color": "#45B7D1",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Strands Agents \u2192 TypeScript<br>Relation: supports",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 2,
+    "to": 4,
+    "label": "supports",
+    "color": {
+      "color": "#45B7D1",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Strands Agents \u2192 Python<br>Relation: supports",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 1,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 Claude SDK<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 3,
+    "label": "implemented_in",
+    "color": {
+      "color": "#98D8C8",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 TypeScript<br>Relation: implemented_in",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 6,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 analyze_annuity_suitability<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 7,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 calculate_annuity_payout<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 8,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 compare_annuity_types<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 9,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 assess_portfolio_allocation<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 10,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 evaluate_tax_implications<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 11,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 fetch_annuity_rates<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 12,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 Zod Validation Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 13,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 Subagent Specialization Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 14,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 Workflow Stage Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 5,
+    "to": 15,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "financial-advisor-agent \u2192 Mock Data Integration Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 12,
+    "to": 26,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Zod Validation Pattern \u2192 Tool Design Best Practices<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 13,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Subagent Specialization Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 14,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Workflow Stage Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 15,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Mock Data Integration Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 2,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 Strands Agents<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 4,
+    "label": "implemented_in",
+    "color": {
+      "color": "#98D8C8",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 Python<br>Relation: implemented_in",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 29,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 search_files<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 30,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 list_folder<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 31,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 get_file_content<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 32,
+    "label": "demonstrates",
+    "color": {
+      "color": "#DDA0DD",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 No RAG For Small Collections<br>Relation: demonstrates",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 33,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 Direct Context Passing Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 34,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 Service-Based Architecture Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 35,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 Smart Caching Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 36,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 OAuth Token Caching Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 39,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 list_shared_drives<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 28,
+    "to": 40,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "google-drive-agent \u2192 Google Drive Shared Drive Support<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 32,
+    "to": 37,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "No RAG For Small Collections \u2192 Question Complexity Assumptions<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 33,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Direct Context Passing Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 34,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Service-Based Architecture Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 35,
+    "to": 26,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Smart Caching Pattern \u2192 Tool Design Best Practices<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 36,
+    "to": 26,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "OAuth Token Caching Pattern \u2192 Tool Design Best Practices<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 39,
+    "to": 40,
+    "label": "demonstrates",
+    "color": {
+      "color": "#DDA0DD",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "list_shared_drives \u2192 Google Drive Shared Drive Support<br>Relation: demonstrates",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 40,
+    "to": 26,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Google Drive Shared Drive Support \u2192 Tool Design Best Practices<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 41,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Incremental Feature Enhancement \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 1,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 Claude SDK<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 4,
+    "label": "implemented_in",
+    "color": {
+      "color": "#98D8C8",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 Python<br>Relation: implemented_in",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 43,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 search_fia_products<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 44,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 extract_fia_rates<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 45,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 analyze_product_fit<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 46,
+    "label": "integrates",
+    "color": {
+      "color": "#F7DC6F",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 fia-analysis-skill<br>Relation: integrates",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 47,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 External Service Integration Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 48,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 Simplified Architecture Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 49,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 N/A Handling Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 50,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 Pydantic Validation Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 42,
+    "to": 51,
+    "label": "demonstrates",
+    "color": {
+      "color": "#DDA0DD",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "fia-analyzer-agent \u2192 Skills Integration for Specialized Frameworks<br>Relation: demonstrates",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 45,
+    "to": 49,
+    "label": "demonstrates",
+    "color": {
+      "color": "#DDA0DD",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "analyze_product_fit \u2192 N/A Handling Pattern<br>Relation: demonstrates",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 47,
+    "to": 52,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "External Service Integration Pattern \u2192 External Services Reduce Complexity<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 48,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Simplified Architecture Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 50,
+    "to": 26,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Pydantic Validation Pattern \u2192 Tool Design Best Practices<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 53,
+    "to": 26,
+    "label": "informs",
+    "color": {
+      "color": "#85C1E2",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Complex Nested Models Need Careful Testing \u2192 Tool Design Best Practices<br>Relation: informs",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 54,
+    "to": 4,
+    "label": "supports",
+    "color": {
+      "color": "#45B7D1",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "OpenAI Agents SDK \u2192 Python<br>Relation: supports",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 54,
+    "label": "uses",
+    "color": {
+      "color": "#888888",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 OpenAI Agents SDK<br>Relation: uses",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 4,
+    "label": "implemented_in",
+    "color": {
+      "color": "#98D8C8",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 Python<br>Relation: implemented_in",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 56,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 portfolio-manager-agent<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 57,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 risk-analyst-agent<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 58,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 compliance-officer-agent<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 59,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 performance-analyst-agent<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 60,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 equity-specialist-agent<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 61,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 run_comprehensive_analysis<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 62,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 suitability_scoring<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 63,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 parallel_execution<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 64,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 market_data<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 65,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 report_generator<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 66,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 Hybrid Multi-Agent Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 67,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 Parallel Agent Execution Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 68,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 Weighted Scoring Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 69,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 Graceful Degradation Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 70,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 Recommendation Generation Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 55,
+    "to": 50,
+    "label": "implements",
+    "color": {
+      "color": "#4ECDC4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-collaboration-system \u2192 Pydantic Validation Pattern<br>Relation: implements",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 56,
+    "to": 61,
+    "label": "includes",
+    "color": {
+      "color": "#96CEB4",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-manager-agent \u2192 run_comprehensive_analysis<br>Relation: includes",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 56,
+    "to": 60,
+    "label": "hands_off_to",
+    "color": {
+      "color": "#CCCCCC",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "portfolio-manager-agent \u2192 equity-specialist-agent<br>Relation: hands_off_to",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 61,
+    "to": 67,
+    "label": "demonstrates",
+    "color": {
+      "color": "#DDA0DD",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "run_comprehensive_analysis \u2192 Parallel Agent Execution Pattern<br>Relation: demonstrates",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 62,
+    "to": 68,
+    "label": "demonstrates",
+    "color": {
+      "color": "#DDA0DD",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "suitability_scoring \u2192 Weighted Scoring Pattern<br>Relation: demonstrates",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 66,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Hybrid Multi-Agent Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 66,
+    "to": 72,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Hybrid Multi-Agent Pattern \u2192 Hybrid Patterns Maximize Capabilities<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 67,
+    "to": 71,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Parallel Agent Execution Pattern \u2192 Parallel vs Sequential Agent Execution<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 69,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Graceful Degradation Pattern \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 70,
+    "to": 26,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Recommendation Generation Pattern \u2192 Tool Design Best Practices<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 75,
+    "to": 68,
+    "label": "informs",
+    "color": {
+      "color": "#85C1E2",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Compliance-First Weighting \u2192 Weighted Scoring Pattern<br>Relation: informs",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  },
+  {
+    "from": 76,
+    "to": 27,
+    "label": "exemplifies",
+    "color": {
+      "color": "#FFEAA7",
+      "highlight": "#FF0000"
+    },
+    "arrows": {
+      "to": {
+        "enabled": true,
+        "scaleFactor": 0.8
+      }
+    },
+    "width": 2,
+    "title": "Mock Data Development with Real Data Ready \u2192 Agent Complexity Management<br>Relation: exemplifies",
+    "smooth": {
+      "type": "continuous",
+      "roundness": 0.5
+    }
+  }
+]);
+        
+        // Create network
+        const container = document.getElementById('mynetwork');
+        const data = {
+            nodes: nodes,
+            edges: edges
+        };
+        
+        const options = {
+            nodes: {
+                shape: 'dot',
+                shadow: true,
+                font: {
+                    size: 12,
+                    face: 'Arial'
+                }
+            },
+            edges: {
+                arrows: {
+                    to: { enabled: true, scaleFactor: 0.8 }
+                },
+                font: {
+                    size: 10,
+                    align: 'middle'
+                },
+                smooth: {
+                    type: 'continuous',
+                    roundness: 0.5
+                }
+            },
+            physics: {
+                enabled: true,
+                stabilization: {
+                    enabled: true,
+                    iterations: 200
+                },
+                barnesHut: {
+                    gravitationalConstant: -2000,
+                    centralGravity: 0.1,
+                    springLength: 200,
+                    springConstant: 0.04,
+                    damping: 0.09
+                }
+            },
+            interaction: {
+                hover: true,
+                tooltipDelay: 100,
+                zoomView: true,
+                dragView: true
+            },
+            layout: {
+                improvedLayout: true
+            }
+        };
+        
+        const network = new vis.Network(container, data, options);
+        
+        let physicsEnabled = true;
+        
+        // Event handlers
+        network.on("click", function (params) {
+            if (params.nodes.length > 0) {
+                const nodeId = params.nodes[0];
+                const node = nodes.get(nodeId);
+                console.log("Selected node:", node.label);
+            }
+        });
+        
+        network.on("stabilizationEnd", function() {
+            console.log("Network stabilized");
+        });
+        
+        // Control functions
+        function fitNetwork() {
+            network.fit();
+        }
+        
+        function resetZoom() {
+            network.moveTo({ scale: 1 });
+        }
+        
+        function togglePhysics() {
+            physicsEnabled = !physicsEnabled;
+            network.setOptions({ physics: { enabled: physicsEnabled } });
+            console.log("Physics " + (physicsEnabled ? "enabled" : "disabled"));
+        }
+        
+        function exportImage() {
+            const canvas = network.getCanvas();
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = 'knowledge_graph.png';
+            link.href = dataURL;
+            link.click();
+        }
+        
+        function searchNodes() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            if (searchTerm === '') {
+                nodes.update(nodes.get().map(node => ({ ...node, hidden: false })));
+                return;
+            }
+            
+            const allNodes = nodes.get();
+            allNodes.forEach(node => {
+                const matches = node.label.toLowerCase().includes(searchTerm);
+                nodes.update({ id: node.id, hidden: !matches });
+            });
+        }
+    </script>
+</body>
+</html>

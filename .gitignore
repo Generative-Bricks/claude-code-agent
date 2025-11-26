@@ -1,0 +1,38 @@
+# Claude Code local settings (DO NOT COMMIT)
+.claude/settings.local.json
+.claude.local.md
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Python virtual environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Node modules
+node_modules/
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+logs/

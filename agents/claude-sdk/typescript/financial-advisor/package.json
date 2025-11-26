@@ -1,0 +1,28 @@
+{
+  "name": "financial-advisor-agent",
+  "version": "1.0.0",
+  "description": "Financial advisor agent focused on annuity allocation using Claude Agent SDK",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "advisor": "tsx src/index.ts",
+    "advisor:verbose": "tsx src/index-verbose.ts",
+    "advisor:trace": "DEBUG=* tsx src/index.ts"
+  },
+  "keywords": ["claude", "agent", "financial", "annuity", "advisor"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.1.37",
+    "zod": "^3.22.4",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

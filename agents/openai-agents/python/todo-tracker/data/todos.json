@@ -1,0 +1,35 @@
+{
+  "todos": [
+    {
+      "id": "6bdbbbe0",
+      "title": "Test task",
+      "description": "This is a test description",
+      "status": "completed",
+      "priority": "high",
+      "tags": [
+        "test",
+        "demo"
+      ],
+      "due_date": null,
+      "created_at": "2025-11-24T20:58:27.624179",
+      "updated_at": "2025-11-24T20:58:27.626189",
+      "completed_at": "2025-11-24T20:58:27.626185"
+    },
+    {
+      "id": "2ecae138",
+      "title": "Complete Scenario Agent",
+      "description": "Final revisions and submissions for the Scenario Agent project.",
+      "status": "pending",
+      "priority": "urgent",
+      "tags": [
+        "work"
+      ],
+      "due_date": "2023-10-06T00:00:00",
+      "created_at": "2025-11-24T21:04:43.858101",
+      "updated_at": "2025-11-24T21:04:43.858102",
+      "completed_at": null
+    }
+  ],
+  "last_updated": "2025-11-24T21:04:43.858775",
+  "count": 2
+}

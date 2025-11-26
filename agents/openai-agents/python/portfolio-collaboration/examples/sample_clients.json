@@ -1,0 +1,121 @@
+{
+  "clients": [
+    {
+      "client_id": "CLT-2024-001",
+      "age": 68,
+      "risk_tolerance": "Conservative",
+      "investment_goals": [
+        "Capital preservation",
+        "Steady income generation",
+        "Minimize volatility"
+      ],
+      "time_horizon": 5,
+      "constraints": [
+        "No high-risk investments",
+        "Prefer blue-chip dividend stocks",
+        "Minimum 40% fixed income allocation"
+      ],
+      "annual_income": 85000,
+      "net_worth": 1250000,
+      "liquidity_needs": "Moderate - emergency fund needed"
+    },
+    {
+      "client_id": "CLT-2024-002",
+      "age": 45,
+      "risk_tolerance": "Moderate",
+      "investment_goals": [
+        "Long-term capital appreciation",
+        "Balanced growth and income",
+        "Retirement planning"
+      ],
+      "time_horizon": 20,
+      "constraints": [
+        "Diversified across sectors",
+        "No more than 10% in any single stock",
+        "ESG-friendly investments preferred"
+      ],
+      "annual_income": 175000,
+      "net_worth": 875000,
+      "liquidity_needs": "Low - stable employment"
+    },
+    {
+      "client_id": "CLT-2024-003",
+      "age": 32,
+      "risk_tolerance": "Aggressive",
+      "investment_goals": [
+        "Maximum capital appreciation",
+        "Early retirement",
+        "Build substantial wealth"
+      ],
+      "time_horizon": 30,
+      "constraints": [
+        "Comfortable with volatility",
+        "High growth potential preferred",
+        "Limited cash allocation needed"
+      ],
+      "annual_income": 250000,
+      "net_worth": 450000,
+      "liquidity_needs": "Very Low - high risk tolerance"
+    },
+    {
+      "client_id": "CLT-2024-004",
+      "age": 55,
+      "risk_tolerance": "Moderate",
+      "investment_goals": [
+        "Wealth preservation",
+        "Tax optimization",
+        "Estate planning"
+      ],
+      "time_horizon": 15,
+      "constraints": [
+        "Tax-efficient investing",
+        "Diversified across asset classes",
+        "Regular distribution planning",
+        "Focus on quality holdings"
+      ],
+      "annual_income": 450000,
+      "net_worth": 5000000,
+      "liquidity_needs": "Moderate - estate planning considerations"
+    },
+    {
+      "client_id": "CLT-2024-005",
+      "age": 28,
+      "risk_tolerance": "Aggressive",
+      "investment_goals": [
+        "Sustainable long-term growth",
+        "Socially responsible investing",
+        "Build substantial wealth"
+      ],
+      "time_horizon": 35,
+      "constraints": [
+        "ESG-compliant only",
+        "Avoid fossil fuels and weapons",
+        "Prefer renewable energy and sustainable companies",
+        "Impact-driven portfolio"
+      ],
+      "annual_income": 125000,
+      "net_worth": 150000,
+      "liquidity_needs": "Low - stable career trajectory"
+    },
+    {
+      "client_id": "CLT-2024-006",
+      "age": 62,
+      "risk_tolerance": "Moderate",
+      "investment_goals": [
+        "Income generation",
+        "Capital preservation",
+        "Healthcare planning"
+      ],
+      "time_horizon": 25,
+      "constraints": [
+        "Reliable income stream required",
+        "Gradual equity exposure reduction",
+        "Healthcare cost contingency",
+        "Estate preservation focus"
+      ],
+      "annual_income": 95000,
+      "net_worth": 2000000,
+      "liquidity_needs": "Moderate - retirement transition period"
+    }
+  ]
+}

@@ -1,0 +1,708 @@
+{
+  "portfolios": [
+    {
+      "portfolio_id": "conservative",
+      "client_id": "CLT-2024-001",
+      "total_value": 1000000,
+      "benchmark": "SPY",
+      "as_of_date": "2025-01-14T00:00:00Z",
+      "holdings": [
+        {
+          "ticker": "JNJ",
+          "company_name": "Johnson & Johnson",
+          "shares": 500,
+          "current_price": 160.50,
+          "market_value": 80250,
+          "asset_class": "Equity",
+          "sector": "Healthcare",
+          "cost_basis": 155.00
+        },
+        {
+          "ticker": "PG",
+          "company_name": "Procter & Gamble",
+          "shares": 600,
+          "current_price": 165.25,
+          "market_value": 99150,
+          "asset_class": "Equity",
+          "sector": "Consumer Staples",
+          "cost_basis": 158.00
+        },
+        {
+          "ticker": "KO",
+          "company_name": "Coca-Cola",
+          "shares": 1200,
+          "current_price": 62.75,
+          "market_value": 75300,
+          "asset_class": "Equity",
+          "sector": "Consumer Staples",
+          "cost_basis": 58.50
+        },
+        {
+          "ticker": "VZ",
+          "company_name": "Verizon Communications",
+          "shares": 1800,
+          "current_price": 42.15,
+          "market_value": 75870,
+          "asset_class": "Equity",
+          "sector": "Telecommunications",
+          "cost_basis": 40.25
+        },
+        {
+          "ticker": "T",
+          "company_name": "AT&T",
+          "shares": 3500,
+          "current_price": 20.85,
+          "market_value": 72975,
+          "asset_class": "Equity",
+          "sector": "Telecommunications",
+          "cost_basis": 19.50
+        },
+        {
+          "ticker": "XOM",
+          "company_name": "Exxon Mobil",
+          "shares": 800,
+          "current_price": 112.30,
+          "market_value": 89840,
+          "asset_class": "Equity",
+          "sector": "Energy",
+          "cost_basis": 105.00
+        },
+        {
+          "ticker": "MMM",
+          "company_name": "3M Company",
+          "shares": 650,
+          "current_price": 98.40,
+          "market_value": 63960,
+          "asset_class": "Equity",
+          "sector": "Industrials",
+          "cost_basis": 95.00
+        },
+        {
+          "ticker": "BND",
+          "company_name": "Vanguard Total Bond Market ETF",
+          "shares": 5000,
+          "current_price": 78.90,
+          "market_value": 394500,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 80.00
+        },
+        {
+          "ticker": "VMBS",
+          "company_name": "Vanguard Mortgage-Backed Securities ETF",
+          "shares": 1000,
+          "current_price": 48.15,
+          "market_value": 48155,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 49.00
+        }
+      ]
+    },
+    {
+      "portfolio_id": "moderate",
+      "client_id": "CLT-2024-002",
+      "total_value": 750000,
+      "benchmark": "SPY",
+      "as_of_date": "2025-01-14T00:00:00Z",
+      "holdings": [
+        {
+          "ticker": "AAPL",
+          "company_name": "Apple Inc.",
+          "shares": 300,
+          "current_price": 185.50,
+          "market_value": 55650,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 170.00
+        },
+        {
+          "ticker": "MSFT",
+          "company_name": "Microsoft Corporation",
+          "shares": 200,
+          "current_price": 378.25,
+          "market_value": 75650,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 350.00
+        },
+        {
+          "ticker": "GOOGL",
+          "company_name": "Alphabet Inc.",
+          "shares": 400,
+          "current_price": 142.30,
+          "market_value": 56920,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 130.00
+        },
+        {
+          "ticker": "AMZN",
+          "company_name": "Amazon.com Inc.",
+          "shares": 250,
+          "current_price": 178.60,
+          "market_value": 44650,
+          "asset_class": "Equity",
+          "sector": "Consumer Discretionary",
+          "cost_basis": 165.00
+        },
+        {
+          "ticker": "NVDA",
+          "company_name": "NVIDIA Corporation",
+          "shares": 150,
+          "current_price": 495.75,
+          "market_value": 74362.50,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 420.00
+        },
+        {
+          "ticker": "JPM",
+          "company_name": "JPMorgan Chase & Co.",
+          "shares": 300,
+          "current_price": 178.90,
+          "market_value": 53670,
+          "asset_class": "Equity",
+          "sector": "Financials",
+          "cost_basis": 165.00
+        },
+        {
+          "ticker": "V",
+          "company_name": "Visa Inc.",
+          "shares": 200,
+          "current_price": 285.40,
+          "market_value": 57080,
+          "asset_class": "Equity",
+          "sector": "Financials",
+          "cost_basis": 270.00
+        },
+        {
+          "ticker": "UNH",
+          "company_name": "UnitedHealth Group",
+          "shares": 100,
+          "current_price": 512.75,
+          "market_value": 51275,
+          "asset_class": "Equity",
+          "sector": "Healthcare",
+          "cost_basis": 480.00
+        },
+        {
+          "ticker": "HD",
+          "company_name": "Home Depot",
+          "shares": 150,
+          "current_price": 385.20,
+          "market_value": 57780,
+          "asset_class": "Equity",
+          "sector": "Consumer Discretionary",
+          "cost_basis": 360.00
+        },
+        {
+          "ticker": "DIS",
+          "company_name": "The Walt Disney Company",
+          "shares": 400,
+          "current_price": 98.50,
+          "market_value": 39400,
+          "asset_class": "Equity",
+          "sector": "Communication Services",
+          "cost_basis": 92.00
+        },
+        {
+          "ticker": "BND",
+          "company_name": "Vanguard Total Bond Market ETF",
+          "shares": 2000,
+          "current_price": 78.90,
+          "market_value": 157800,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 80.00
+        },
+        {
+          "ticker": "VNQ",
+          "company_name": "Vanguard Real Estate ETF",
+          "shares": 300,
+          "current_price": 85.75,
+          "market_value": 25725,
+          "asset_class": "Alternatives",
+          "sector": "Real Estate",
+          "cost_basis": 82.00
+        }
+      ]
+    },
+    {
+      "portfolio_id": "aggressive",
+      "client_id": "CLT-2024-003",
+      "total_value": 425000,
+      "benchmark": "SPY",
+      "as_of_date": "2025-01-14T00:00:00Z",
+      "holdings": [
+        {
+          "ticker": "TSLA",
+          "company_name": "Tesla Inc.",
+          "shares": 300,
+          "current_price": 242.50,
+          "market_value": 72750,
+          "asset_class": "Equity",
+          "sector": "Consumer Discretionary",
+          "cost_basis": 210.00
+        },
+        {
+          "ticker": "NVDA",
+          "company_name": "NVIDIA Corporation",
+          "shares": 100,
+          "current_price": 495.75,
+          "market_value": 49575,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 380.00
+        },
+        {
+          "ticker": "AMD",
+          "company_name": "Advanced Micro Devices",
+          "shares": 400,
+          "current_price": 148.30,
+          "market_value": 59320,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 125.00
+        },
+        {
+          "ticker": "META",
+          "company_name": "Meta Platforms Inc.",
+          "shares": 150,
+          "current_price": 485.60,
+          "market_value": 72840,
+          "asset_class": "Equity",
+          "sector": "Communication Services",
+          "cost_basis": 420.00
+        },
+        {
+          "ticker": "SHOP",
+          "company_name": "Shopify Inc.",
+          "shares": 500,
+          "current_price": 87.25,
+          "market_value": 43625,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 72.00
+        },
+        {
+          "ticker": "SQ",
+          "company_name": "Block Inc.",
+          "shares": 600,
+          "current_price": 68.40,
+          "market_value": 41040,
+          "asset_class": "Equity",
+          "sector": "Financials",
+          "cost_basis": 58.00
+        },
+        {
+          "ticker": "PLTR",
+          "company_name": "Palantir Technologies",
+          "shares": 1000,
+          "current_price": 35.80,
+          "market_value": 35800,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 28.00
+        },
+        {
+          "ticker": "COIN",
+          "company_name": "Coinbase Global",
+          "shares": 150,
+          "current_price": 195.50,
+          "market_value": 29325,
+          "asset_class": "Equity",
+          "sector": "Financials",
+          "cost_basis": 165.00
+        },
+        {
+          "ticker": "ARKK",
+          "company_name": "ARK Innovation ETF",
+          "shares": 300,
+          "current_price": 48.75,
+          "market_value": 14625,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 42.00
+        },
+        {
+          "ticker": "CRWD",
+          "company_name": "CrowdStrike Holdings",
+          "shares": 50,
+          "current_price": 318.60,
+          "market_value": 15930,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 275.00
+        },
+        {
+          "ticker": "BND",
+          "company_name": "Vanguard Total Bond Market ETF",
+          "shares": 500,
+          "current_price": 78.90,
+          "market_value": 39450,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 80.00
+        },
+        {
+          "ticker": "QQQ",
+          "company_name": "Invesco QQQ Trust",
+          "shares": 100,
+          "current_price": 507.20,
+          "market_value": 50720,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 470.00
+        }
+      ]
+    },
+    {
+      "portfolio_id": "high_net_worth",
+      "client_id": "CLT-2024-004",
+      "total_value": 5000000,
+      "benchmark": "SPY",
+      "as_of_date": "2025-01-14T00:00:00Z",
+      "holdings": [
+        {
+          "ticker": "AAPL",
+          "company_name": "Apple Inc.",
+          "shares": 5000,
+          "current_price": 185.50,
+          "market_value": 927500,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 175.00
+        },
+        {
+          "ticker": "BRK.B",
+          "company_name": "Berkshire Hathaway Inc. Class B",
+          "shares": 3000,
+          "current_price": 410.50,
+          "market_value": 1231500,
+          "asset_class": "Equity",
+          "sector": "Financials",
+          "cost_basis": 390.00
+        },
+        {
+          "ticker": "JNJ",
+          "company_name": "Johnson & Johnson",
+          "shares": 2000,
+          "current_price": 160.50,
+          "market_value": 321000,
+          "asset_class": "Equity",
+          "sector": "Healthcare",
+          "cost_basis": 152.00
+        },
+        {
+          "ticker": "KO",
+          "company_name": "Coca-Cola",
+          "shares": 1500,
+          "current_price": 62.75,
+          "market_value": 94125,
+          "asset_class": "Equity",
+          "sector": "Consumer Staples",
+          "cost_basis": 58.00
+        },
+        {
+          "ticker": "PG",
+          "company_name": "Procter & Gamble",
+          "shares": 1200,
+          "current_price": 165.25,
+          "market_value": 198300,
+          "asset_class": "Equity",
+          "sector": "Consumer Staples",
+          "cost_basis": 158.00
+        },
+        {
+          "ticker": "MCD",
+          "company_name": "McDonald's Corporation",
+          "shares": 800,
+          "current_price": 298.75,
+          "market_value": 239000,
+          "asset_class": "Equity",
+          "sector": "Consumer Discretionary",
+          "cost_basis": 285.00
+        },
+        {
+          "ticker": "MUN",
+          "company_name": "iShares National Muni Bond ETF",
+          "shares": 8000,
+          "current_price": 103.25,
+          "market_value": 826000,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 104.50
+        },
+        {
+          "ticker": "BND",
+          "company_name": "Vanguard Total Bond Market ETF",
+          "shares": 6000,
+          "current_price": 78.90,
+          "market_value": 473400,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 80.00
+        },
+        {
+          "ticker": "VNQ",
+          "company_name": "Vanguard Real Estate ETF",
+          "shares": 2500,
+          "current_price": 85.75,
+          "market_value": 214375,
+          "asset_class": "Alternatives",
+          "sector": "Real Estate",
+          "cost_basis": 82.00
+        },
+        {
+          "ticker": "SCHP",
+          "company_name": "Schwab U.S. TIPS ETF",
+          "shares": 3000,
+          "current_price": 56.80,
+          "market_value": 170400,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 57.50
+        },
+        {
+          "ticker": "VGIT",
+          "company_name": "Vanguard Intermediate-Term Treasury ETF",
+          "shares": 2000,
+          "current_price": 61.45,
+          "market_value": 122900,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 62.00
+        },
+        {
+          "ticker": "GLD",
+          "company_name": "SPDR Gold Shares",
+          "shares": 500,
+          "current_price": 198.50,
+          "market_value": 99250,
+          "asset_class": "Alternatives",
+          "sector": "Commodities",
+          "cost_basis": 192.00
+        }
+      ]
+    },
+    {
+      "portfolio_id": "esg_growth",
+      "client_id": "CLT-2024-005",
+      "total_value": 150000,
+      "benchmark": "SPY",
+      "as_of_date": "2025-01-14T00:00:00Z",
+      "holdings": [
+        {
+          "ticker": "TSLA",
+          "company_name": "Tesla Inc.",
+          "shares": 150,
+          "current_price": 242.50,
+          "market_value": 36375,
+          "asset_class": "Equity",
+          "sector": "Consumer Discretionary",
+          "cost_basis": 220.00
+        },
+        {
+          "ticker": "ICLN",
+          "company_name": "iShares Global Clean Energy ETF",
+          "shares": 800,
+          "current_price": 34.50,
+          "market_value": 27600,
+          "asset_class": "Equity",
+          "sector": "Energy",
+          "cost_basis": 31.00
+        },
+        {
+          "ticker": "TAN",
+          "company_name": "Invesco Solar ETF",
+          "shares": 600,
+          "current_price": 48.25,
+          "market_value": 28950,
+          "asset_class": "Equity",
+          "sector": "Energy",
+          "cost_basis": 45.00
+        },
+        {
+          "ticker": "EUSA",
+          "company_name": "iShares MSCI USA ESG Select ETF",
+          "shares": 400,
+          "current_price": 95.75,
+          "market_value": 38300,
+          "asset_class": "Equity",
+          "sector": "Technology",
+          "cost_basis": 90.00
+        },
+        {
+          "ticker": "ESGD",
+          "company_name": "iShares MSCI Developed Markets ESG ETF",
+          "shares": 300,
+          "current_price": 65.50,
+          "market_value": 19650,
+          "asset_class": "Equity",
+          "sector": "Financials",
+          "cost_basis": 62.00
+        },
+        {
+          "ticker": "SUEZ",
+          "company_name": "iShares Global Water ETF",
+          "shares": 200,
+          "current_price": 58.25,
+          "market_value": 11650,
+          "asset_class": "Equity",
+          "sector": "Utilities",
+          "cost_basis": 55.00
+        },
+        {
+          "ticker": "BGRN",
+          "company_name": "iShares Green Bond ETF",
+          "shares": 500,
+          "current_price": 41.80,
+          "market_value": 20900,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 42.50
+        },
+        {
+          "ticker": "HYLD",
+          "company_name": "MSCI SustainableSelect US ESG Fixed Income",
+          "shares": 300,
+          "current_price": 32.40,
+          "market_value": 9720,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 33.00
+        }
+      ]
+    },
+    {
+      "portfolio_id": "income_focused",
+      "client_id": "CLT-2024-006",
+      "total_value": 2000000,
+      "benchmark": "SPY",
+      "as_of_date": "2025-01-14T00:00:00Z",
+      "holdings": [
+        {
+          "ticker": "JNJ",
+          "company_name": "Johnson & Johnson",
+          "shares": 1500,
+          "current_price": 160.50,
+          "market_value": 240750,
+          "asset_class": "Equity",
+          "sector": "Healthcare",
+          "cost_basis": 152.00
+        },
+        {
+          "ticker": "PG",
+          "company_name": "Procter & Gamble",
+          "shares": 1200,
+          "current_price": 165.25,
+          "market_value": 198300,
+          "asset_class": "Equity",
+          "sector": "Consumer Staples",
+          "cost_basis": 158.00
+        },
+        {
+          "ticker": "KO",
+          "company_name": "Coca-Cola",
+          "shares": 1000,
+          "current_price": 62.75,
+          "market_value": 62750,
+          "asset_class": "Equity",
+          "sector": "Consumer Staples",
+          "cost_basis": 58.00
+        },
+        {
+          "ticker": "MCD",
+          "company_name": "McDonald's Corporation",
+          "shares": 600,
+          "current_price": 298.75,
+          "market_value": 179250,
+          "asset_class": "Equity",
+          "sector": "Consumer Discretionary",
+          "cost_basis": 280.00
+        },
+        {
+          "ticker": "PM",
+          "company_name": "Philip Morris International",
+          "shares": 1100,
+          "current_price": 95.30,
+          "market_value": 104830,
+          "asset_class": "Equity",
+          "sector": "Consumer Staples",
+          "cost_basis": 90.00
+        },
+        {
+          "ticker": "T",
+          "company_name": "AT&T",
+          "shares": 3000,
+          "current_price": 20.85,
+          "market_value": 62550,
+          "asset_class": "Equity",
+          "sector": "Telecommunications",
+          "cost_basis": 19.50
+        },
+        {
+          "ticker": "VZ",
+          "company_name": "Verizon Communications",
+          "shares": 1500,
+          "current_price": 42.15,
+          "market_value": 63225,
+          "asset_class": "Equity",
+          "sector": "Telecommunications",
+          "cost_basis": 40.50
+        },
+        {
+          "ticker": "PFF",
+          "company_name": "iShares Preferred & Income Securities ETF",
+          "shares": 2500,
+          "current_price": 35.40,
+          "market_value": 88500,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 36.00
+        },
+        {
+          "ticker": "BND",
+          "company_name": "Vanguard Total Bond Market ETF",
+          "shares": 8000,
+          "current_price": 78.90,
+          "market_value": 631200,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 80.00
+        },
+        {
+          "ticker": "VGIT",
+          "company_name": "Vanguard Intermediate-Term Treasury ETF",
+          "shares": 3000,
+          "current_price": 61.45,
+          "market_value": 184350,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 62.50
+        },
+        {
+          "ticker": "SCHP",
+          "company_name": "Schwab U.S. TIPS ETF",
+          "shares": 2000,
+          "current_price": 56.80,
+          "market_value": 113600,
+          "asset_class": "Fixed Income",
+          "sector": "Bonds",
+          "cost_basis": 57.50
+        },
+        {
+          "ticker": "VNQ",
+          "company_name": "Vanguard Real Estate ETF",
+          "shares": 1000,
+          "current_price": 85.75,
+          "market_value": 85750,
+          "asset_class": "Alternatives",
+          "sector": "Real Estate",
+          "cost_basis": 82.00
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,609 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "version": "1.0.0",
+  "manifestType": "agent-scaffolding-manifest",
+  "metadata": {
+    "agentName": "[Agent Name]",
+    "version": "1.0.0",
+    "createdDate": "[YYYY-MM-DD]",
+    "author": "[Your Name]",
+    "description": "[One-sentence description]"
+  },
+  "technical": {
+    "sdk": {
+      "name": "[claude-sdk|openai-agents|strands-agents|langgraph]",
+      "version": "[Version number]",
+      "rationale": "[Why this SDK was chosen]"
+    },
+    "language": {
+      "name": "[typescript|python]",
+      "version": "[Version number]",
+      "rationale": "[Why this language was chosen]"
+    },
+    "complexity": {
+      "level": "[low|medium|high]",
+      "estimatedHours": "[Number]",
+      "toolCount": "[Number]",
+      "subagentCount": "[Number]",
+      "workflowStages": "[Number]"
+    },
+    "runtime": {
+      "typescript": {
+        "runtime": "bun",
+        "packageManager": "bun"
+      },
+      "python": {
+        "runtime": "python",
+        "packageManager": "uv",
+        "virtualEnv": ".venv"
+      }
+    }
+  },
+  "agent": {
+    "name": "[Agent Name]",
+    "model": "[claude-sonnet-4|gpt-4|etc]",
+    "persona": {
+      "role": "[Primary role description]",
+      "expertise": [
+        "[Domain #1]",
+        "[Domain #2]"
+      ],
+      "communicationStyle": {
+        "tone": "[formal|conversational|technical]",
+        "language": "[simple|professional|domain-specific]",
+        "personality": "[helpful|analytical|creative]"
+      },
+      "capabilities": [
+        "[Capability #1]",
+        "[Capability #2]"
+      ],
+      "limitations": [
+        "[Limitation #1]",
+        "[Limitation #2]"
+      ],
+      "safetyConstraints": [
+        "[Constraint #1]",
+        "[Constraint #2]"
+      ]
+    },
+    "instructions": "[System prompt text - can be multi-line string]"
+  },
+  "tools": [
+    {
+      "name": "tool_name_1",
+      "description": "[What this tool does]",
+      "inputSchema": {
+        "typescript": {
+          "validation": "zod",
+          "schema": {
+            "param1": {
+              "type": "string",
+              "validation": "min(1)",
+              "description": "Description of param1",
+              "required": true
+            },
+            "param2": {
+              "type": "number",
+              "validation": "positive()",
+              "description": "Description of param2",
+              "required": true
+            },
+            "param3": {
+              "type": "enum",
+              "values": ["option1", "option2", "option3"],
+              "description": "Description of param3",
+              "required": false
+            }
+          }
+        },
+        "python": {
+          "validation": "pydantic",
+          "schema": {
+            "param1": {
+              "type": "str",
+              "validation": "Field(min_length=1)",
+              "description": "Description of param1",
+              "required": true
+            },
+            "param2": {
+              "type": "int",
+              "validation": "Field(gt=0)",
+              "description": "Description of param2",
+              "required": true
+            },
+            "param3": {
+              "type": "Literal['option1', 'option2', 'option3']",
+              "validation": "Optional",
+              "description": "Description of param3",
+              "required": false
+            }
+          }
+        }
+      },
+      "outputSchema": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether operation succeeded"
+        },
+        "data": {
+          "type": "object",
+          "description": "Result data",
+          "optional": true,
+          "fields": {
+            "field1": {
+              "type": "string",
+              "description": "Description of field1"
+            },
+            "field2": {
+              "type": "number",
+              "description": "Description of field2"
+            }
+          }
+        },
+        "error": {
+          "type": "string",
+          "description": "Error message if failed",
+          "optional": true
+        }
+      },
+      "errorConditions": [
+        {
+          "condition": "Invalid input",
+          "handling": "Return error message with details"
+        },
+        {
+          "condition": "Missing data",
+          "handling": "Request specific missing fields"
+        },
+        {
+          "condition": "External failure",
+          "handling": "Graceful degradation with warning"
+        }
+      ],
+      "exampleUsage": {
+        "input": {
+          "param1": "example value",
+          "param2": 123
+        },
+        "output": {
+          "success": true,
+          "data": {
+            "field1": "result",
+            "field2": 456
+          }
+        }
+      }
+    }
+  ],
+  "subagents": [
+    {
+      "name": "Subagent Name",
+      "model": "[claude-sonnet-4|claude-haiku-4|gpt-4]",
+      "responsibility": "[What this subagent does]",
+      "triggeredWhen": "[Condition for delegation]",
+      "inputContext": [
+        "[Data point #1 from main agent]",
+        "[Data point #2 from main agent]"
+      ],
+      "outputSchema": {
+        "field1": {
+          "type": "string",
+          "description": "Description"
+        },
+        "field2": {
+          "type": "number",
+          "description": "Description"
+        }
+      },
+      "successCriteria": "[How main agent evaluates result]"
+    }
+  ],
+  "workflow": {
+    "stages": [
+      {
+        "name": "[Stage Name]",
+        "order": 1,
+        "purpose": "[What this stage accomplishes]",
+        "activities": [
+          "[Activity #1]",
+          "[Activity #2]"
+        ],
+        "informationCollected": [
+          "[Data point #1]",
+          "[Data point #2]"
+        ],
+        "toolsUsed": [
+          "tool_name_1",
+          "tool_name_2"
+        ],
+        "progressionCondition": "[When/how to move to next stage]",
+        "errorHandling": "[What happens if stage fails]",
+        "estimatedDuration": "[Time estimate in seconds]"
+      }
+    ],
+    "type": "[linear|branching|hybrid]",
+    "stateManagement": "[stateless|in-memory|persisted]"
+  },
+  "dataModel": {
+    "entities": [
+      {
+        "name": "EntityName",
+        "description": "[What this entity represents]",
+        "typescript": {
+          "validation": "zod",
+          "schema": {
+            "id": {
+              "type": "string",
+              "validation": "uuid()",
+              "description": "Unique identifier"
+            },
+            "field1": {
+              "type": "string",
+              "description": "Description"
+            },
+            "field2": {
+              "type": "number",
+              "description": "Description"
+            },
+            "nested": {
+              "type": "object",
+              "optional": true,
+              "schema": {
+                "subfield1": {
+                  "type": "string",
+                  "description": "Description"
+                }
+              }
+            }
+          }
+        },
+        "python": {
+          "validation": "pydantic",
+          "schema": {
+            "id": {
+              "type": "UUID",
+              "description": "Unique identifier"
+            },
+            "field1": {
+              "type": "str",
+              "description": "Description"
+            },
+            "field2": {
+              "type": "int",
+              "description": "Description"
+            },
+            "nested": {
+              "type": "Optional[NestedModel]",
+              "description": "Nested model"
+            }
+          }
+        },
+        "relationships": [
+          {
+            "type": "has_many",
+            "target": "OtherEntity",
+            "description": "Relationship description"
+          }
+        ]
+      }
+    ]
+  },
+  "patterns": [
+    {
+      "name": "Zod/Pydantic Validation",
+      "category": "validation",
+      "required": true,
+      "rationale": "Type-safe input validation (required)"
+    },
+    {
+      "name": "Mock Data First",
+      "category": "data-management",
+      "required": false,
+      "rationale": "Fast development, predictable tests"
+    },
+    {
+      "name": "[Pattern Name]",
+      "category": "[Category]",
+      "required": false,
+      "rationale": "[Why this pattern was selected]"
+    }
+  ],
+  "dependencies": {
+    "typescript": {
+      "dependencies": {
+        "@anthropics/sdk": "^0.1.37",
+        "zod": "^3.22.0"
+      },
+      "devDependencies": {
+        "@types/bun": "latest",
+        "typescript": "^5.0.0"
+      }
+    },
+    "python": {
+      "runtime": [
+        "anthropic>=0.18.0",
+        "pydantic>=2.6.0",
+        "python-dotenv>=1.0.0"
+      ],
+      "dev": [
+        "pytest>=8.0.0",
+        "mypy>=1.8.0"
+      ]
+    }
+  },
+  "environment": {
+    "required": [
+      {
+        "name": "ANTHROPIC_API_KEY",
+        "description": "Anthropic API key",
+        "type": "secret",
+        "example": "sk-ant-..."
+      }
+    ],
+    "optional": [
+      {
+        "name": "USE_MOCK_DATA",
+        "description": "Use mock data instead of real API",
+        "type": "boolean",
+        "default": "true",
+        "example": "true"
+      },
+      {
+        "name": "LOG_LEVEL",
+        "description": "Logging level",
+        "type": "string",
+        "default": "info",
+        "example": "debug"
+      }
+    ]
+  },
+  "mcp": {
+    "servers": [
+      {
+        "name": "context7",
+        "purpose": "Documentation retrieval",
+        "configuration": {
+          "command": "npx",
+          "args": ["-y", "@context7/mcp-server"]
+        },
+        "permissions": [
+          "mcp__context7__get-library-docs",
+          "mcp__context7__resolve-library-id"
+        ]
+      },
+      {
+        "name": "fetch",
+        "purpose": "Web content fetching",
+        "configuration": {
+          "command": "npx",
+          "args": ["-y", "@modelcontextprotocol/server-fetch"]
+        },
+        "permissions": [
+          "mcp__fetch__fetch"
+        ]
+      }
+    ]
+  },
+  "testing": {
+    "framework": {
+      "typescript": "bun:test",
+      "python": "pytest"
+    },
+    "coverageTarget": 60,
+    "unitTests": [
+      {
+        "tool": "tool_name_1",
+        "testCases": [
+          "Happy path",
+          "Invalid input",
+          "Edge cases"
+        ],
+        "priority": "high"
+      }
+    ],
+    "integrationTests": [
+      {
+        "name": "Happy path workflow",
+        "description": "Complete workflow with valid inputs",
+        "expectedResult": "Successful completion"
+      },
+      {
+        "name": "Error recovery workflow",
+        "description": "Workflow with intentional errors",
+        "expectedResult": "Graceful degradation"
+      }
+    ],
+    "performanceTargets": {
+      "toolResponseSimple": {
+        "target": 1000,
+        "unit": "ms"
+      },
+      "toolResponseComplex": {
+        "target": 5000,
+        "unit": "ms"
+      },
+      "endToEndWorkflow": {
+        "target": 120000,
+        "unit": "ms"
+      },
+      "tokenUsage": {
+        "target": 10000,
+        "unit": "tokens"
+      }
+    }
+  },
+  "mockData": {
+    "required": [
+      {
+        "type": "[Data Type]",
+        "description": "[Description]",
+        "quantity": "[Number of examples needed]",
+        "structure": {
+          "field1": "value",
+          "field2": 123
+        }
+      }
+    ],
+    "integrationPoints": [
+      {
+        "function": "fetchData",
+        "mockPath": "src/data/mockData.ts",
+        "realApiEndpoint": "/api/data",
+        "environmentToggle": "USE_MOCK_DATA"
+      }
+    ]
+  },
+  "projectStructure": {
+    "directories": [
+      "src/",
+      "src/types/",
+      "src/tools/",
+      "src/subagents/",
+      "src/data/",
+      "tests/",
+      "tests/tools/",
+      "tests/integration/",
+      ".claude/"
+    ],
+    "files": {
+      "typescript": [
+        {
+          "path": "src/index.ts",
+          "purpose": "Main agent configuration",
+          "template": "agent-config-template"
+        },
+        {
+          "path": "src/types/index.ts",
+          "purpose": "Type definitions and Zod schemas",
+          "template": "types-template"
+        },
+        {
+          "path": "src/tools/[toolName].ts",
+          "purpose": "Tool implementation",
+          "template": "tool-template",
+          "repeat": "per-tool"
+        },
+        {
+          "path": "package.json",
+          "purpose": "Dependencies and scripts",
+          "template": "package-json-template"
+        },
+        {
+          "path": "tsconfig.json",
+          "purpose": "TypeScript configuration",
+          "template": "tsconfig-template"
+        },
+        {
+          "path": ".env.example",
+          "purpose": "Environment variables example",
+          "template": "env-template"
+        },
+        {
+          "path": "README.md",
+          "purpose": "Quick start guide",
+          "template": "readme-template"
+        },
+        {
+          "path": ".claude/CLAUDE.md",
+          "purpose": "Comprehensive documentation",
+          "template": "claude-md-template"
+        }
+      ],
+      "python": [
+        {
+          "path": "src/__init__.py",
+          "purpose": "Package init"
+        },
+        {
+          "path": "src/main.py",
+          "purpose": "Main agent configuration",
+          "template": "agent-config-template"
+        },
+        {
+          "path": "src/models/__init__.py",
+          "purpose": "Pydantic models package"
+        },
+        {
+          "path": "src/models/[entityName].py",
+          "purpose": "Entity model",
+          "template": "model-template",
+          "repeat": "per-entity"
+        },
+        {
+          "path": "src/tools/__init__.py",
+          "purpose": "Tools package"
+        },
+        {
+          "path": "src/tools/[toolName].py",
+          "purpose": "Tool implementation",
+          "template": "tool-template",
+          "repeat": "per-tool"
+        },
+        {
+          "path": "requirements.txt",
+          "purpose": "Python dependencies",
+          "template": "requirements-template"
+        },
+        {
+          "path": "pyproject.toml",
+          "purpose": "Python project configuration",
+          "template": "pyproject-template"
+        },
+        {
+          "path": ".env.example",
+          "purpose": "Environment variables example",
+          "template": "env-template"
+        },
+        {
+          "path": "README.md",
+          "purpose": "Quick start guide",
+          "template": "readme-template"
+        },
+        {
+          "path": ".claude/CLAUDE.md",
+          "purpose": "Comprehensive documentation",
+          "template": "claude-md-template"
+        }
+      ]
+    }
+  },
+  "scaffoldingInstructions": {
+    "targetDirectory": "[Path where project should be created]",
+    "generationMode": "[full|minimal|custom]",
+    "includeTests": true,
+    "includeMockData": true,
+    "includeDocumentation": true,
+    "customizations": [
+      {
+        "file": "[File path]",
+        "customization": "[What to customize]"
+      }
+    ]
+  },
+  "implementationNotes": [
+    {
+      "priority": "high",
+      "note": "[Critical implementation detail]"
+    },
+    {
+      "priority": "medium",
+      "note": "[Important implementation detail]"
+    }
+  ],
+  "futureEnhancements": [
+    {
+      "version": "1.1",
+      "enhancements": [
+        "[Enhancement #1]",
+        "[Enhancement #2]"
+      ]
+    },
+    {
+      "version": "2.0",
+      "enhancements": [
+        "[Major enhancement #1]",
+        "[Major enhancement #2]"
+      ]
+    }
+  ]
+}

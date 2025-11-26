@@ -1,0 +1,30 @@
+{
+  "// TEAM SETTINGS": "Shared configuration for all team members - COMMIT this file",
+
+  "// MCP SERVERS": "Enable specific MCP servers for this project",
+  "enabledMcpjsonServers": [
+    "bedrock-agentcore-mcp-server",
+    "awslabs.core-mcp-server",
+    "awslabs.aws-diagram-mcp-server",
+    "awslabs.aws-api-mcp-server",
+    "awslabs.cdk-mcp-server",
+    "awslabs.aws-documentation-mcp-server",
+    "awslabs.code-doc-gen-mcp-server",
+    "awslabs.frontend-mcp-server",
+    "aws-knowledge-mcp-server",
+    "awslabs.terraform-mcp-server",
+    "strands-agents",
+    "powertools",
+    "memory",
+    "fetch"
+  ],
+  "enableAllProjectMcpServers": true,
+
+  "// PLUGINS": "Enable Claude Code plugins for all team members",
+  "enabledPlugins": {
+    "agent-sdk-dev@claude-code-plugins": true,
+    "feature-dev@claude-code-plugins": true,
+    "commit-commands@claude-code-plugins": true,
+    "pr-review-toolkit@claude-code-plugins": true
+  }
+}

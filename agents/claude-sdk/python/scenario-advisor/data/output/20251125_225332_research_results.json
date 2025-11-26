@@ -1,0 +1,795 @@
+{
+  "annuity_events": [
+    {
+      "criteria": {
+        "surrender_period_end_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "current_surrender_charge": {
+          "operator": "greater_than",
+          "value": 0
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your surrender period ends within 30 days - this is your penalty-free window to make changes",
+          "Let's review if current rates and performance justify keeping funds in this contract",
+          "We should evaluate 1035 exchange opportunities before this window closes"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "surrender_period_ending"
+      }
+    },
+    {
+      "criteria": {
+        "annuity_type": "MYGA",
+        "maturity_date": {
+          "operator": "within_days",
+          "value": 30
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your MYGA matures in 30 days - we need to decide on renewal or alternative strategies",
+          "Current market rates may offer better opportunities than auto-renewal",
+          "Let's discuss laddering strategies or moving to different annuity types"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "myga_maturity"
+      }
+    },
+    {
+      "criteria": {
+        "annuity_type": "FIA",
+        "rate_reset_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "current_crediting_method": {
+          "operator": "exists"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your FIA rate reset occurs in 30 days - time to review index allocation strategy",
+          "Market volatility may favor switching to different crediting methods",
+          "Let's analyze cap rates and participation rates for the upcoming term"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "fia_rate_reset"
+      }
+    },
+    {
+      "criteria": {
+        "owner_age": {
+          "operator": "equals",
+          "value": 73
+        },
+        "birthday_within_days": {
+          "operator": "less_than_equal",
+          "value": 30
+        },
+        "rmd_taken_current_year": {
+          "operator": "equals",
+          "value": false
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "You're approaching age 73 - RMDs will be required from qualified annuities",
+          "We need to calculate and plan for your first required distribution",
+          "Let's review IRA vs non-qualified annuity positioning before RMDs begin"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "rmd_trigger"
+      }
+    },
+    {
+      "criteria": {
+        "income_rider_start_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "income_rider_status": {
+          "operator": "equals",
+          "value": "deferring"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your income rider becomes available for activation within 30 days",
+          "Let's review whether starting income now aligns with your retirement timeline",
+          "We should compare current payout rates with continued deferral benefits"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "income_rider_activation"
+      }
+    },
+    {
+      "criteria": {
+        "bonus_recapture_end_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "bonus_amount": {
+          "operator": "greater_than",
+          "value": 0
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "MEDIUM",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your bonus recapture period ends in 30 days - you'll keep the full bonus after this date",
+          "This milestone may open up new strategic options for your contract",
+          "Let's evaluate if changes make sense now that the bonus is fully vested"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "bonus_vesting"
+      }
+    },
+    {
+      "criteria": {
+        "annuity_type": "VA",
+        "contract_anniversary": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "guaranteed_benefit_step_up": {
+          "operator": "equals",
+          "value": "available"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "medium"
+      },
+      "confidence": "MEDIUM",
+      "actionability": {
+        "priority": "MEDIUM",
+        "talking_points": [
+          "Your VA contract anniversary is approaching - time to review guaranteed benefit step-ups",
+          "Market performance may have created opportunities for benefit base increases",
+          "Let's analyze whether rebalancing makes sense at this anniversary date"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "va_anniversary"
+      }
+    },
+    {
+      "criteria": {
+        "partial_withdrawal_allowance_reset": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "partial_withdrawal_used_percentage": {
+          "operator": "greater_than",
+          "value": 50
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "medium"
+      },
+      "confidence": "MEDIUM",
+      "actionability": {
+        "priority": "MEDIUM",
+        "talking_points": [
+          "Your partial withdrawal allowance resets within 30 days",
+          "You've used most of this year's penalty-free withdrawal limit",
+          "Let's plan any additional withdrawals for after the reset date"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "withdrawal_allowance_reset"
+      }
+    },
+    {
+      "criteria": {
+        "annuity_type": "DIA",
+        "income_start_date": {
+          "operator": "within_days",
+          "value": 30
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your deferred income annuity payments begin within 30 days",
+          "Let's confirm payment instructions and beneficiary information are current",
+          "We should review how this income fits into your overall retirement cash flow"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "dia_income_start"
+      }
+    },
+    {
+      "criteria": {
+        "guaranteed_period_end_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "annuity_type": {
+          "operator": "in",
+          "value": [
+            "SPIA",
+            "DIA"
+          ]
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "medium"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "MEDIUM",
+        "talking_points": [
+          "The guaranteed period on your immediate annuity ends within 30 days",
+          "Beneficiary protections will change after this date",
+          "Let's review your overall estate planning in light of this change"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "guaranteed_period_ending"
+      }
+    },
+    {
+      "criteria": {
+        "free_look_period_end": {
+          "operator": "within_days",
+          "value": 10
+        },
+        "contract_issue_date": {
+          "operator": "within_days",
+          "value": 20
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_10_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your free look period ends in 10 days - last chance for full refund",
+          "Let's confirm this annuity meets your expectations and needs",
+          "Any concerns should be addressed immediately before this window closes"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "free_look_ending"
+      }
+    },
+    {
+      "criteria": {
+        "annuity_type": "FIA",
+        "index_term_end_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "current_index_performance": {
+          "operator": "exists"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "MEDIUM",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your FIA index term ends within 30 days - time to lock in gains",
+          "Let's review index performance and select strategies for the next term",
+          "Market conditions may favor different index allocations going forward"
+        ]
+      },
+      "metadata": {
+        "source": "annuity_researcher",
+        "category": "fia_index_term_end"
+      }
+    }
+  ],
+  "life_events": [
+    {
+      "criteria": {
+        "age": {
+          "operator": "equals",
+          "value": 65
+        },
+        "medicare_enrollment_date": {
+          "operator": "within_days",
+          "value": 30
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your Medicare enrollment deadline is approaching - missing it could result in lifetime penalties",
+          "Let's coordinate your Medicare Part B timing with your employer health coverage",
+          "We should review how Medicare premiums will impact your retirement budget"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "healthcare_transition"
+      }
+    },
+    {
+      "criteria": {
+        "retirement_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "employment_status": {
+          "operator": "equals",
+          "value": "employed"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your retirement is just weeks away - let's finalize your 401(k) rollover strategy",
+          "Have you elected your pension payout option? This decision is typically irrevocable",
+          "We need to activate your retirement income plan and coordinate Social Security timing"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "retirement_transition"
+      }
+    },
+    {
+      "criteria": {
+        "job_termination_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "severance_package": {
+          "operator": "greater_than",
+          "value": 0
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your job transition is approaching - let's optimize the tax treatment of your severance",
+          "We should roll your 401(k) to an IRA to maintain investment control and reduce fees",
+          "COBRA coverage is expensive - let's explore ACA marketplace alternatives"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "career_transition"
+      }
+    },
+    {
+      "criteria": {
+        "tax_year_end": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "taxable_income": {
+          "operator": "greater_than",
+          "value": 100000
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Year-end is approaching - let's harvest tax losses to offset your gains",
+          "Consider maximizing your 401(k) contributions before December 31st",
+          "Roth IRA conversions could be strategic if you expect higher tax rates in retirement"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "tax_planning"
+      }
+    },
+    {
+      "criteria": {
+        "spouse_death_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "estate_settlement_status": {
+          "operator": "equals",
+          "value": "pending"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "I'm here to help navigate the financial decisions during this difficult time",
+          "We need to review beneficiary designations and retitle accounts in your name",
+          "Social Security survivor benefits may be available - let's explore your options"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "family_transition"
+      }
+    },
+    {
+      "criteria": {
+        "home_sale_closing_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "sale_proceeds": {
+          "operator": "greater_than",
+          "value": 250000
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your home sale closes soon - let's plan the investment of your proceeds",
+          "We should consider the capital gains tax implications of your home sale",
+          "A 1031 exchange might defer taxes if you're buying investment property"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "major_transaction"
+      }
+    },
+    {
+      "criteria": {
+        "divorce_decree_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "marital_status": {
+          "operator": "equals",
+          "value": "divorcing"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your divorce will be final soon - let's update all your financial accounts and beneficiaries",
+          "We need to establish your independent financial plan and budget",
+          "QDRO transfers from your ex-spouse's 401(k) should be executed promptly"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "family_transition"
+      }
+    },
+    {
+      "criteria": {
+        "business_sale_closing_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "sale_proceeds": {
+          "operator": "greater_than",
+          "value": 500000
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your business sale is imminent - let's optimize the tax structure of this transaction",
+          "Installment sale treatment could spread the tax burden over multiple years",
+          "We should diversify the concentrated wealth from your business sale immediately"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "business_transition"
+      }
+    },
+    {
+      "criteria": {
+        "inheritance_probate_close_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "inheritance_value": {
+          "operator": "greater_than",
+          "value": 100000
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your inheritance will be distributed soon - let's create an investment strategy",
+          "Inherited assets receive a stepped-up basis, which affects your tax planning",
+          "We should integrate this windfall into your existing financial plan"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "wealth_transition"
+      }
+    },
+    {
+      "criteria": {
+        "child_college_enrollment_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "529_plan_balance": {
+          "operator": "greater_than",
+          "value": 50000
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "medium"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "MEDIUM",
+        "talking_points": [
+          "College starts soon - let's coordinate 529 withdrawals with tuition payments",
+          "We should optimize the timing of distributions to minimize tax impact",
+          "Consider whether any education tax credits apply to your situation"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "education_funding"
+      }
+    },
+    {
+      "criteria": {
+        "stock_option_expiration_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "option_value": {
+          "operator": "greater_than",
+          "value": 25000
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your stock options expire soon - we need to decide on exercise strategy immediately",
+          "Consider the tax implications of exercising ISOs versus NQSOs",
+          "A cashless exercise might be optimal given current market conditions"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "executive_compensation"
+      }
+    },
+    {
+      "criteria": {
+        "rmd_due_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "age": {
+          "operator": "greater_than",
+          "value": 72
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your required minimum distribution is due soon - the penalty is 50% if missed",
+          "Let's coordinate RMD timing with your other income to minimize tax impact",
+          "Consider a qualified charitable distribution to satisfy your RMD tax-free"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "retirement_compliance"
+      }
+    },
+    {
+      "criteria": {
+        "long_term_care_assessment_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "age": {
+          "operator": "greater_than",
+          "value": 75
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "high"
+      },
+      "confidence": "MEDIUM",
+      "actionability": {
+        "priority": "HIGH",
+        "talking_points": [
+          "Your care needs assessment is scheduled - let's review your long-term care insurance",
+          "We should explore Medicaid planning strategies to protect your assets",
+          "Consider establishing a special needs trust if care becomes necessary"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "healthcare_planning"
+      }
+    },
+    {
+      "criteria": {
+        "pension_election_deadline": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "pension_value": {
+          "operator": "greater_than",
+          "value": 100000
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "critical"
+      },
+      "confidence": "HIGH",
+      "actionability": {
+        "priority": "CRITICAL",
+        "talking_points": [
+          "Your pension election deadline is approaching - this decision is usually irrevocable",
+          "Let's analyze whether the lump sum or annuity option better fits your plan",
+          "Consider your spouse's survivor benefits when making this critical choice"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "retirement_election"
+      }
+    },
+    {
+      "criteria": {
+        "insurance_policy_renewal_date": {
+          "operator": "within_days",
+          "value": 30
+        },
+        "policy_type": {
+          "operator": "equals",
+          "value": "term_life"
+        },
+        "conversion_option": {
+          "operator": "equals",
+          "value": "available"
+        }
+      },
+      "temporal_context": {
+        "time_range": "next_30_days",
+        "urgency": "medium"
+      },
+      "confidence": "MEDIUM",
+      "actionability": {
+        "priority": "MEDIUM",
+        "talking_points": [
+          "Your term life insurance renews soon - premiums typically increase significantly",
+          "You may have a conversion option to permanent insurance without health underwriting",
+          "Let's review whether your current coverage still meets your family's needs"
+        ]
+      },
+      "metadata": {
+        "source": "life_event_researcher",
+        "category": "insurance_planning"
+      }
+    }
+  ]
+}

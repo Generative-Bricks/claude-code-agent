@@ -1,0 +1,34 @@
+{
+  "scenario_id": "FIA-001",
+  "name": "FIA Replacement Opportunity",
+  "description": "Identify clients with Fixed Indexed Annuities where surrender period is ending and current rates are below market",
+  "category": "annuity",
+  "criteria": [
+    {
+      "field": "fia_surrender_end_months",
+      "operator": "lte",
+      "value": 12,
+      "weight": 1.0
+    },
+    {
+      "field": "fia_current_cap_rate",
+      "operator": "lt",
+      "value": 5.5,
+      "weight": 0.8
+    },
+    {
+      "field": "fia_value",
+      "operator": "gt",
+      "value": 50000,
+      "weight": 0.6
+    }
+  ],
+  "revenue_formula": {
+    "formula_type": "percentage",
+    "base_rate": 0.01,
+    "multiplier_field": "fia_value",
+    "min_revenue": 500,
+    "max_revenue": 50000
+  },
+  "priority": "medium"
+}

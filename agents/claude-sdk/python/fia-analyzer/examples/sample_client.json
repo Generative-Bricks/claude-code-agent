@@ -1,0 +1,19 @@
+{
+  "age": 62,
+  "state": "Texas",
+  "total_investable_assets": 500000,
+  "annual_income": 80000,
+  "proposed_premium_amount": 100000,
+  "has_emergency_fund": true,
+  "primary_investment_objective": "Retirement income with principal protection",
+  "risk_tolerance": "Conservative",
+  "needs_liquidity_near_term": false,
+  "is_in_good_health": true,
+  "time_horizon_years": 20,
+  "has_other_income_sources": true,
+  "can_commit_funds_for_term": true,
+  "seeks_principal_protection": true,
+  "wants_guaranteed_lifetime_income": true,
+  "comfortable_with_expected_returns": true,
+  "understands_not_direct_market_investment": true
+}

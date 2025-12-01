@@ -1,0 +1,71 @@
+# Application Specification
+# ========================
+#
+# Replace this file with your own application specification.
+# The initializer agent will read this file and create feature_list.json.
+#
+# ============================================================================
+# HOW TO USE THIS FILE
+# ============================================================================
+#
+# 1. Delete everything below "YOUR APPLICATION SPECIFICATION STARTS HERE"
+# 2. Write a detailed specification for the application you want to build
+# 3. Include:
+#    - Application overview and purpose
+#    - Technology stack (React, Node.js, database, etc.)
+#    - Core features with detailed descriptions
+#    - UI/UX requirements
+#    - Data models and API endpoints
+#    - Any special requirements or constraints
+#
+# ============================================================================
+# EXAMPLES
+# ============================================================================
+#
+# For a complex example (Claude.ai clone), see:
+# https://github.com/anthropics/claude-quickstarts/blob/main/autonomous-coding/prompts/app_spec.txt
+#
+# Simple examples you could use:
+#
+# - TODO App: Task management with categories, due dates, priorities
+# - Blog: Posts, comments, user authentication, markdown support
+# - E-commerce: Product catalog, cart, checkout, order history
+# - Dashboard: Data visualization, charts, real-time updates
+# - Chat App: Real-time messaging, rooms, user presence
+#
+# ============================================================================
+# YOUR APPLICATION SPECIFICATION STARTS HERE
+# ============================================================================
+
+[YOUR APPLICATION SPECIFICATION HERE]
+
+# Example minimal spec (delete and replace with your own):
+#
+# Application: Simple Task Manager
+#
+# Overview:
+# A clean, modern task management application for personal productivity.
+#
+# Technology Stack:
+# - Frontend: React + Vite, Tailwind CSS
+# - Backend: Node.js/Express
+# - Database: SQLite
+#
+# Core Features:
+# 1. Task CRUD operations (create, read, update, delete)
+# 2. Task categories/tags
+# 3. Due dates with calendar picker
+# 4. Priority levels (high, medium, low)
+# 5. Task completion status
+# 6. Search and filter tasks
+# 7. Dark/light theme toggle
+#
+# UI Requirements:
+# - Clean, minimalist design
+# - Responsive layout (mobile-friendly)
+# - Keyboard shortcuts for common actions
+# - Drag-and-drop task reordering
+#
+# Data Model:
+# Task: { id, title, description, category, dueDate, priority, completed, createdAt, updatedAt }
+# Category: { id, name, color }
